@@ -53,8 +53,8 @@ class Review(BaseModel):
     @place.setter
     def place(self, value):
         """sets place of review"""
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("Place must be a non-empty string.")
+        if not isinstance(value) or not value.strip():
+            raise ValueError("Place must be a valid object")
         self._place = value
 
     @property
@@ -65,8 +65,8 @@ class Review(BaseModel):
     @user.setter
     def user(self, value):
         """returns user of review"""
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("User must be a non-empty string.")
+        if not isinstance(value) or not value.strip():
+            raise ValueError("User must be a valid object type")
         self._user = value
     
     @property

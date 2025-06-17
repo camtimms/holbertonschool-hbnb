@@ -4,7 +4,7 @@ This is a review class
 from . import BaseModel
 
 class Review(BaseModel):
-    def __init__(self, text, rating, place, user, replies):
+    def __init__(self, text, rating, place, user):
         super().__init__()
         self.text = text
         self.rating = rating
@@ -12,12 +12,14 @@ class Review(BaseModel):
         self.user = user
         self.replies = []
 
+    # --- Method ---
     def add_reply(self, reply):
         """Add a reply to review"""
         if not isinstance(reply, str) or not reply.strip():
             raise ValueError("Reply must be a non-empty string.")
         self.replies.append(reply.strip())
 
+    # --- Getters and Setters ---
     @property
     def text(self):
         """returns text for review"""
@@ -31,7 +33,7 @@ class Review(BaseModel):
             self._text = value.strip()
         else:
             raise ValueError("Invalid review length!")
-    
+
     @property
     def rating(self):
         """returns rating for review"""
@@ -49,7 +51,7 @@ class Review(BaseModel):
     def place(self):
         """returns place of review"""
         return self._place
-    
+
     @place.setter
     def place(self, value):
         """sets place of review"""
@@ -60,7 +62,7 @@ class Review(BaseModel):
     @property
     def user(self):
         """returns user of review"""
-        return self._user   
+        return self._user
 
     @user.setter
     def user(self, value):
@@ -68,16 +70,4 @@ class Review(BaseModel):
         if not isinstance(value, str) or not value.strip():
             raise ValueError("User must be a non-empty string.")
         self._user = value
-    
-    @property
-    def replies(self):
-        """returns replies of reviews"""
-        return self._replies
 
-    @replies.setter
-    def replies(self, value):
-        """sets replies of reviews"""
-        if isinstance(value, list):
-            self._replies = value
-        else:
-            raise ValueError("invalid object passed for replies!")

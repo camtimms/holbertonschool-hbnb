@@ -2,7 +2,7 @@
 This is a place class
 """
 from . import BaseModel
-from app.models.user import User
+from app.models.users import User
 
 
 class Place(BaseModel):

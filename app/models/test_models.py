@@ -25,7 +25,8 @@ def test_place_creation():
     place = Place(title="Cozy Apartment", description="A nice place to stay", price=100, latitude=37.7749, longitude=-122.4194, owner=owner)
 
     # Adding a review
-    review = Review(text="Great stay!", rating=5, place=place, user=owner, replies="Thankyou for your stay")
+    review = Review(text="Great stay!", rating=5, place=place, user=owner)
+    review.add_reply("Thankyou for your stay")
     place.add_review(review)
 
     assert place.title == "Cozy Apartment"
@@ -43,6 +44,6 @@ def test_amenity_creation():
 
 """ Run function """
 if __name__ == "__main__":
-    # test_user_creation()
+    test_user_creation()
     test_place_creation()
     test_amenity_creation()

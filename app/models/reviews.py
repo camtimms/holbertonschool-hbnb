@@ -10,11 +10,13 @@ class Review(BaseModel):
         self.rating = rating
         self.place = place
         self.user = user
-        self.replies = replies
+        self.replies = []
 
     def add_reply(self, reply):
         """Add a reply to review"""
-        self.replies.append(reply)
+        if not isinstance(reply, str) or not reply.strip():
+            raise ValueError("Reply must be a non-empty string.")
+        self.replies.append(reply.strip())
 
     @property
     def text(self):

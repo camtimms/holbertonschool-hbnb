@@ -24,10 +24,9 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute('email', email)
 
     # --- CRU Place ---
-    def create_place(self, title, description, price, latitude, longitude, owner):
+    def create_place(self, place_data):
         # Creates the place by calling the model/class we created
-        place = Place(title=title, description=description, price=price,
-                      latitude=latitude, longitude=longitude, owner=owner)
+        place = Place(**place_data)
         # Store it in the repository
         self.place_repo.add(place)
         # Return the created place
@@ -36,6 +35,7 @@ class HBnBFacade:
     def get_place(self, place_id):
         # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
         place = self.place_repo.get(place_id)
+        # Check if place exists and raise error if not
         if place is None:
             raise ValueError(f"Place with ID {place_id} not found")
         return place

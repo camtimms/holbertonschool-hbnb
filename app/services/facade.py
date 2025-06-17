@@ -23,7 +23,7 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
 
-    # --- CRU Place
+    # --- CRU Place ---
     def create_place(self, title, description, price, latitude, longitude, owner):
         # Creates the place by calling the model/class we created
         place = Place(title=title, description=description, price=price,

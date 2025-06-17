@@ -2,20 +2,21 @@
 This is the user class
 """
 from . import BaseModel
+import re
 
 class User(BaseModel):
     def __init__(self, first_name, last_name, email, is_admin = False):
         super().__init__()
         self.first_name = first_name
-        self.last_name = last_name  
+        self.last_name = last_name
         self.email = email
         self.is_admin = is_admin #If user has admin privilages
-    
+
     #getter and setter for first_name
     @property
     def first_name(self):
         return self._first_name
-    
+
     @first_name.setter
     def first_name(self, value):
         is_valid_name = 0 < len(value.strip()) <= 50
@@ -23,12 +24,12 @@ class User(BaseModel):
             self._first_name = value.strip()
         else:
             raise ValueError("Invalid name length")
-    
+
     #getter and setter for last_name
     @property
     def last_name(self):
         return self._last_name
-    
+
     @last_name.setter
     def last_name(self, value):
         is_valid_name = 0 < len(value.strip()) <= 50
@@ -41,7 +42,7 @@ class User(BaseModel):
     @property
     def email(self):
         return self._email
-    
+
     @email.setter
     def email(self, value):
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -49,12 +50,15 @@ class User(BaseModel):
             self._email = value.strip()
         else:
             raise ValueError("Email not valid")
-    
-    #getter and setter for is_admin (boolean) FIX THIS ONE 
+
+    #getter and setter for is_admin (boolean) FIX THIS ONE
     @property
     def is_admin(self):
         return self._is_admin
-    
-    def is_admin(self):
-        if self.is_admin == True:
-            return is_admin is True
+
+    @is_admin.setter
+    def is_admin(self, value):
+        if isinstance(value, bool):
+            self._is_admin = value
+        else:
+            raise ValueError("is_admin must be a boolean")

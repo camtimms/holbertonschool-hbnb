@@ -1,4 +1,8 @@
 from app.persistence.repository import InMemoryRepository
+from app.models.places import Place
+from app.models.users import User
+from app.models.reviews import Review
+from app.models.amenity import Amenity
 
 class HBnBFacade:
     def __init__(self):
@@ -12,13 +16,21 @@ class HBnBFacade:
         # Logic will be implemented in later tasks
         pass
 
-    def create_place(self, place_data):
-        # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        pass
+    def create_place(self, title, description, price, latitude, longitude, owner):
+        # Creates the place by calling the model/class we created
+        place = Place(title=title, description=description, price=price,
+                      latitude=latitude, longitude=longitude, owner=owner)
+        # Store it in the repository
+        self.place_repo.add(place)
+        # Return the created place
+        return place
 
     def get_place(self, place_id):
         # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
-        pass
+        place = self.place_repo.get(place_id)
+        if place is None:
+            raise ValueError(f"Place with ID {place_id} not found")
+        return place
 
     def get_all_places(self):
         # Placeholder for logic to retrieve all places

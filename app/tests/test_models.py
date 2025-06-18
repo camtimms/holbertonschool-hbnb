@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 Run from project root with module flag:
-python3 -m app.models.test_models
+python3 -m app.tests.test_models
 """
 from app.models.places import Place
 from app.models.users import User

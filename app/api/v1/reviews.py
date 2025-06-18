@@ -63,8 +63,10 @@ class ReviewResource(Resource):
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review"""
-        # Placeholder for the logic to delete a review
-        pass
+        deleted = facade.delete_review(review_id)
+        if deleted:
+            return {'message': 'Review deleted'}, 200
+        return {'message': 'Review not found'}, 404
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):
@@ -72,5 +74,9 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        # Placeholder for logic to return a list of reviews for a place
-        pass
+        place = facade.place_repo(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+        reviews = facade.get_reviews_by_place(place_id)
+        return reviews, 200
+

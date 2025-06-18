@@ -2,7 +2,7 @@
 This is a place class
 """
 from . import BaseModel
-from app.models.user import User
+from app.models.users import User
 
 
 class Place(BaseModel):
@@ -55,8 +55,8 @@ class Place(BaseModel):
     @price.setter
     def price(self, value):
         """Setter for prop price"""
-        if isinstance(value, float) and value > 0.0:
-            self._price = value
+        if isinstance(value, (int, float)) and value > 0.0:
+            self._price = float(value)
         else:
             raise ValueError("Invalid value specified for price")
 

@@ -52,21 +52,39 @@ class HBnBFacade:
 
     # --- CRU Amenity ---
     def create_amenity(self, amenity_data):
-    # Placeholder for logic to create an amenity
-        pass
+        amenity = Amenity(**amenity__data)
+        #check if amenity is already existing
+        check_amenity = self.amenity_repo.get(amenity_id)
+        #if amenity does not exist, create new
+        if check_amenity is None:
+            self.amenity_data.add(amenity)
+            return amenity
+        #else, return an existing amenity
+        else:
+            return self.amenity_repo.get(amenity_data)
+        # is it amenity_data?
 
     def get_amenity(self, amenity_id):
-        # Placeholder for logic to retrieve an amenity by ID
-        pass
+        #if amenity_id doesn't exist
+        check_id = self.amenity_repo.get(amenity_id)
+        if check_id is None:
+            raise ValueError (f"Amenity with ID {amenity_id} not found")
+        return check_id
 
     def get_all_amenities(self):
-        # Placeholder for logic to retrieve all amenities
-        pass
+        #if there are no amenities
+        if self.amenity_repo.get_all() is None:
+            raise ValueError ("Amenities not found")
+        return self.amenity_repo.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
-        # Placeholder for logic to update an amenity
-        pass
-
+        #if amenity_id doesn't exist
+        check_id = self.amenity_repo.get(amenity_id)
+        if check_id is None:
+            raise ValueError (f"Amenity with ID {amenity_id} not found")
+        return self.amenity_data.update(amenity_id, amenity_data)
+    
+    # --- CRU Review ---
     def create_review(self, review_data):
         #validate required fields
         required_fields = ['user_id', 'place_id', 'rating', 'text']

@@ -2,6 +2,8 @@
 This is a review class
 """
 from . import BaseModel
+from app.models.places import Place
+from app.models.users import User
 
 class Review(BaseModel):
     def __init__(self, text, rating, place, user):
@@ -55,8 +57,10 @@ class Review(BaseModel):
     @place.setter
     def place(self, value):
         """sets place of review"""
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("Place must be a non-empty string.")
+
+        if not isinstance(value, Place):
+            raise ValueError("Place must be a Place object.")
+
         self._place = value
 
     @property
@@ -66,8 +70,9 @@ class Review(BaseModel):
 
     @user.setter
     def user(self, value):
-        """returns user of review"""
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("User must be a non-empty string.")
-        self._user = value
 
+        """sets user of review"""
+        if not isinstance(value, User):
+            raise ValueError("User must be a User object.")
+
+        self._user = value

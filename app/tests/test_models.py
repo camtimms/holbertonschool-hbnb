@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 Run from project root with module flag:
-python3 -m app.models.test_models
+python3 -m app.tests.test_models
 """
 from app.models.places import Place
 from app.models.users import User
@@ -19,7 +19,7 @@ def test_user_creation():
     print("User creation test passed!")
 
 
-""" Testing Place Class with Relationships """
+""" Testing Place and Review Class with Relationships """
 def test_place_creation():
     owner = User(first_name="Alice", last_name="Smith", email="alice.smith@example.com")
     place = Place(title="Cozy Apartment", description="A nice place to stay", price=100, latitude=37.7749, longitude=-122.4194, owner=owner)

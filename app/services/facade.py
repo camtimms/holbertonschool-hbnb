@@ -96,20 +96,28 @@ class HBnBFacade:
                 return ValueError(f"Missing field: {field}")
 
         # Validate user and place id
-        if not self.user_repo.get(review_data['user_id']):
+        user = self.user_repo.get(review_data['user_id'])
+        if not user:
             raise ValueError("Invalid user_id")
-        if not self.place_repo.get(review_data['place_id']):
+        place = self.place_repo.get(review_data['place_id'])
+        if not place:
             raise ValueError("Invalid place_id")
+
         # Validate rating
         rating = review_data['rating']
         if not isinstance(rating, (int, float)) or not (1 <= rating <= 5):
             raise ValueError("Rating must be between 1 and 5")
-        # Create id for review
-        review_id = str(uuid.uuid4())
-        review_data['id'] = review_id
 
-        self.review_repo.add(review_data)
-        return review_data
+        # Create Review object with actual User and Place objects
+        review = Review(
+            text=review_data['text'],
+            rating=rating,
+            place=place,
+            user=user
+        )
+
+        self.review_repo.add(review)
+        return review
 
     def get_review(self, review_id):
         return self.review_repo.get(review_id)
@@ -118,7 +126,7 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-       return [review for review in self.review_repo.get_all() if review['place_id'] is place_id]
+        return [review for review in self.review_repo.get_all() if review.place == place_id]
 
     def update_review(self, review_id, review_data):
         review = self.review_repo.get(review_id)
@@ -130,10 +138,10 @@ class HBnBFacade:
             new_rating = review_data['rating']
             if not isinstance(new_rating, (int, float)) or not (1 <= new_rating <= 5):
                 raise ValueError("Rating must be between 1 and 5")
-            review['rating'] = new_rating
+            review.rating = new_rating
 
         if 'text' in review_data:
-            review['text'] = review_data['text']
+            review.text = review_data['text']
 
         return review
 

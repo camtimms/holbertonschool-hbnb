@@ -71,7 +71,7 @@ class HBnBFacade:
         required_fields = ['user_id', 'place_id', 'rating', 'text']
         for field in required_fields:
             if field not in review_data:
-                return ValueError(f"Missing field: {field}")
+                raise ValueError(f"Missing field: {field}")
 
         # Validate user and place id
         user = self.user_repo.get(review_data['user_id'])
@@ -104,7 +104,7 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        return [review for review in self.review_repo.get_all() if review.place == place_id]
+        return [review for review in self.review_repo.get_all() if review.place.id == place_id]
 
 
     def update_review(self, review_id, review_data):

@@ -1,10 +1,5 @@
 from app.persistence.repository import InMemoryRepository
-
 import uuid
-from app.models.places import Place
-from app.models.users import User
-from app.models.reviews import Review
-from app.models.amenity import Amenity
 
 class HBnBFacade:
     def __init__(self):
@@ -13,34 +8,18 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # --- CRU User ---
+    # Placeholder method for creating a user
     def create_user(self, user_data):
-        user = User(**user_data)
-        self.user_repo.add(user)
-        return user
+        # Logic will be implemented in later tasks
+        pass
 
-    def get_user(self, user_id):
-        return self.user_repo.get(user_id)
-
-    def get_user_by_email(self, email):
-        return self.user_repo.get_by_attribute('email', email)
-
-    # --- CRU Place ---
     def create_place(self, place_data):
-        # Creates the place by calling the model/class we created
-        place = Place(**place_data)
-        # Store it in the repository
-        self.place_repo.add(place)
-        # Return the created place
-        return place
+        # Placeholder for logic to create a place, including validation for price, latitude, and longitude
+        pass
 
     def get_place(self, place_id):
         # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
-        place = self.place_repo.get(place_id)
-        # Check if place exists and raise error if not
-        if place is None:
-            raise ValueError(f"Place with ID {place_id} not found")
-        return place
+        pass
 
     def get_all_places(self):
         # Placeholder for logic to retrieve all places
@@ -50,7 +29,6 @@ class HBnBFacade:
         # Placeholder for logic to update a place
         pass
 
-    # --- CRU Amenity ---
     def create_amenity(self, amenity_data):
     # Placeholder for logic to create an amenity
         pass
@@ -97,7 +75,7 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-       return [review for review in self.review_repo.get_all() if review['plade_id'] is place_id]
+       return [review for review in self.review_repo.get_all() if review['place_id'] is place_id]
 
     def update_review(self, review_id, review_data):
         review = self.review_repo.get(review_id)

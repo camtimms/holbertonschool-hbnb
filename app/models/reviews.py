@@ -57,8 +57,10 @@ class Review(BaseModel):
     @place.setter
     def place(self, value):
         """sets place of review"""
+
         if not isinstance(value, Place):
             raise ValueError("Place must be a Place object.")
+
         self._place = value
 
     @property
@@ -68,7 +70,9 @@ class Review(BaseModel):
 
     @user.setter
     def user(self, value):
+
         """sets user of review"""
         if not isinstance(value, User):
             raise ValueError("User must be a User object.")
+
         self._user = value

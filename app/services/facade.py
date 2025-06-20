@@ -1,5 +1,8 @@
 from app.persistence.repository import InMemoryRepository
-import uuid
+from app.models.places import Place
+from app.models.users import User
+from app.models.reviews import Review
+from app.models.amenity import Amenity
 
 class HBnBFacade:
     def __init__(self):
@@ -8,18 +11,34 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # Placeholder method for creating a user
+    # --- CRU User ---
     def create_user(self, user_data):
-        # Logic will be implemented in later tasks
-        pass
+        user = User(**user_data)
+        self.user_repo.add(user)
+        return user
 
+    def get_user(self, user_id):
+        return self.user_repo.get(user_id)
+
+    def get_user_by_email(self, email):
+        return self.user_repo.get_by_attribute('email', email)
+
+    # --- CRU Place ---
     def create_place(self, place_data):
-        # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        pass
+        # Creates the place by calling the model/class we created
+        place = Place(**place_data)
+        # Store it in the repository
+        self.place_repo.add(place)
+        # Return the created place
+        return place
 
     def get_place(self, place_id):
         # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
-        pass
+        place = self.place_repo.get(place_id)
+        # Check if place exists and raise error if not
+        if place is None:
+            raise ValueError(f"Place with ID {place_id} not found")
+        return place
 
     def get_all_places(self):
         if self.place_repo.get_all() is None:
@@ -33,6 +52,7 @@ class HBnBFacade:
             raise ValueError (f"Place with ID {place_id} not found")
         return self.place_repo.update(place_id, place_data)
 
+    # --- CRU Amenity ---
     def create_amenity(self, amenity_data):
         amenity = Amenity(**amenity_data)
         # Check if amenity is already existing
@@ -105,7 +125,6 @@ class HBnBFacade:
 
     def get_reviews_by_place(self, place_id):
         return [review for review in self.review_repo.get_all() if review.place.id == place_id]
-
 
     def update_review(self, review_id, review_data):
         review = self.review_repo.get(review_id)

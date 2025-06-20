@@ -25,11 +25,44 @@ class HBnBFacade:
 
     # --- CRU Place ---
     def create_place(self, place_data):
-        # Creates the place by calling the model/class we created
-        place = Place(**place_data)
-        # Store it in the repository
+        """Create a new place with owner and amenity resolution"""
+
+        # 1. Find the owner by owner_id
+        owner_id = place_data.get('owner_id')
+        if not owner_id:
+            raise ValueError("owner_id is required")
+
+        owner = self.user_repo.get(owner_id)
+        if not owner:
+            raise ValueError(f"User with ID {owner_id} not found")
+
+        # 2. Validate that all amenities exist
+        amenity_ids = place_data.get('amenities', [])
+        amenity_objects = []
+
+        for amenity_id in amenity_ids:
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity with ID {amenity_id} not found")
+            amenity_objects.append(amenity)
+
+        # 3. Create the place with actual objects (not IDs)
+        place = Place(
+            title=place_data['title'],
+            description=place_data.get('description', ''),  # Optional field
+            price=place_data['price'],
+            latitude=place_data['latitude'],
+            longitude=place_data['longitude'],
+            owner=owner  # Pass the actual User object
+        )
+
+        # 4. Add amenities to the place
+        for amenity in amenity_objects:
+            place.add_amenity(amenity)
+
+        # 5. Store the place in repository
         self.place_repo.add(place)
-        # Return the created place
+
         return place
 
     def get_place(self, place_id):
@@ -50,7 +83,9 @@ class HBnBFacade:
         check_id = self.place_repo.get(place_id)
         if check_id is None:
             raise ValueError (f"Place with ID {place_id} not found")
-        return self.place_repo.update(place_id, place_data)
+        self.place_repo.update(place_id, place_data)
+        return self.place_repo.get(place_id)
+
 
     # --- CRU Amenity ---
     def create_amenity(self, amenity_data):

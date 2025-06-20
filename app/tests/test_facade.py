@@ -128,7 +128,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         }
         place = self.facade.create_place(place_data)
 
@@ -150,7 +150,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 150.0,
             'latitude': 40.7128,
             'longitude': -74.0060,
-            'owner': owner
+            'owner': owner.id
         })
 
         retrieved_place = self.facade.get_place(place.id)
@@ -173,7 +173,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         self.facade.create_place({
@@ -182,7 +182,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 200.0,
             'latitude': 40.7128,
             'longitude': -74.0060,
-            'owner': owner
+            'owner': owner.id
         })
 
         places = self.facade.get_all_places()
@@ -202,7 +202,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         self.facade.update_place(place.id, {'title': 'Updated Place'})
@@ -235,7 +235,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 150.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         review_data = {
@@ -272,7 +272,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         review = self.facade.create_review({
@@ -312,7 +312,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         # Create two reviews
@@ -353,7 +353,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         # Create reviews for this place
@@ -394,7 +394,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         review = self.facade.create_review({
@@ -438,7 +438,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner
+            'owner': owner.id
         })
 
         review = self.facade.create_review({

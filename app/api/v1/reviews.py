@@ -63,7 +63,7 @@ class ReviewResource(Resource):
             return {'error': 'Review not found'}, 404
         except ValueError as e:
             return {'error': str(e)}, 400
-    
+
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
@@ -82,7 +82,7 @@ class PlaceReviewList(Resource):
     def get(self, place_id):
         """Get all reviews for a specific place"""
 
-        place = facade.place_repo(place_id)
+        place = facade.get_place(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
         reviews = facade.get_reviews_by_place(place_id)

@@ -53,7 +53,7 @@ class PlaceList(Resource):
             new_place = facade.create_place(place_data)
             return serialize_place(new_place), 201
         except ValueError as e:
-            return {'error', str(e)}, 400
+            return {'error': str(e)}, 400
 
     @api.response(200, 'List of places retrieved successfully')
     def get(self):

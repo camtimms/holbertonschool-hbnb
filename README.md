@@ -59,7 +59,7 @@ holbertonschool-hbnb/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/holbertonschool-hbnb.git
+   git clone https://github.com/camtimms/holbertonschool-hbnb.git
    cd holbertonschool-hbnb
    ```
 
@@ -177,25 +177,6 @@ The application uses configuration classes in `config.py`:
 - **Authentication**: No user authentication system implemented yet
 - **File Upload**: No support for image uploads for places
 - **Search**: No search functionality for places or amenities
-
-## 🔮 Future Enhancements
-
-- Database integration (SQLAlchemy)
-- User authentication and authorization
-- File upload support for place images
-- Search and filtering capabilities
-- Pagination for large datasets
-- Rate limiting and API throttling
-- Email notifications
-- Payment integration
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📝 License
 

@@ -116,11 +116,22 @@ class TestHBnBFacade(unittest.TestCase):
 
     def test_create_place(self):
         """Test creating a place"""
+        # First create an owner
         owner = self.facade.create_user({
             'first_name': 'Alice',
             'last_name': 'Smith',
             'email': 'alice@example.com'
         })
+
+        # Create some amenities for testing
+        amenity1 = self.facade.create_amenity({'name': 'Wi-Fi'})
+        amenity2 = self.facade.create_amenity({'name': 'Pool'})
+        # Store IDs safely
+        amenity1_id = amenity1.id if amenity1 else None
+        amenity2_id = amenity2.id if amenity2 else None
+        # Ensure amenities were created successfully
+        self.assertIsNotNone(amenity1, "Amenity1 should be created")
+        self.assertIsNotNone(amenity2, "Amenity2 should be created")
 
         place_data = {
             'title': 'Cozy Apartment',
@@ -128,13 +139,15 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id,
+            'amenities': [amenity1_id, amenity2_id]
         }
         place = self.facade.create_place(place_data)
 
         self.assertEqual(place.title, 'Cozy Apartment')
         self.assertEqual(place.price, 100.0)
         self.assertEqual(place.owner.id, owner.id)
+        self.assertEqual(len(place.amenities), 2)
 
     def test_get_place(self):
         """Test getting a place by ID"""
@@ -150,7 +163,8 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 150.0,
             'latitude': 40.7128,
             'longitude': -74.0060,
-            'owner': owner.id
+            'owner_id': owner.id,
+            'amenities': []
         })
 
         retrieved_place = self.facade.get_place(place.id)
@@ -173,7 +187,8 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id,
+            'amenities': []
         })
 
         self.facade.create_place({
@@ -182,7 +197,8 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 200.0,
             'latitude': 40.7128,
             'longitude': -74.0060,
-            'owner': owner.id
+            'owner_id': owner.id,
+            'amenities': []
         })
 
         places = self.facade.get_all_places()
@@ -202,7 +218,8 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id,
+            'amenities': []
         })
 
         self.facade.update_place(place.id, {'title': 'Updated Place'})
@@ -212,6 +229,46 @@ class TestHBnBFacade(unittest.TestCase):
             self.assertEqual(updated_place.title, 'Updated Place')
         else:
             self.fail("Updated place should have been found")
+
+    def test_create_place_with_invalid_owner(self):
+        """Test creating a place with non-existent owner"""
+        place_data = {
+            'title': 'Test Place',
+            'description': 'A test place',
+            'price': 100.0,
+            'latitude': 37.7749,
+            'longitude': -122.4194,
+            'owner_id': 'non-existent-id',  # Invalid owner ID
+            'amenities': []
+        }
+
+        with self.assertRaises(ValueError) as context:
+            self.facade.create_place(place_data)
+
+        self.assertIn("User with ID non-existent-id not found", str(context.exception))
+
+    def test_create_place_with_invalid_amenity(self):
+        """Test creating a place with non-existent amenity"""
+        owner = self.facade.create_user({
+            'first_name': 'Owner',
+            'last_name': 'User',
+            'email': 'owner@example.com'
+        })
+
+        place_data = {
+            'title': 'Test Place',
+            'description': 'A test place',
+            'price': 100.0,
+            'latitude': 37.7749,
+            'longitude': -122.4194,
+            'owner_id': owner.id,
+            'amenities': ['non-existent-amenity-id']  # Invalid amenity ID
+        }
+
+        with self.assertRaises(ValueError) as context:
+            self.facade.create_place(place_data)
+
+        self.assertIn("Amenity with ID non-existent-amenity-id not found", str(context.exception))
 
     # ==================== REVIEW TESTS ====================
 
@@ -235,7 +292,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 150.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         review_data = {
@@ -272,7 +329,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         review = self.facade.create_review({
@@ -312,7 +369,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         # Create two reviews
@@ -353,7 +410,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         # Create reviews for this place
@@ -394,7 +451,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         review = self.facade.create_review({
@@ -438,7 +495,7 @@ class TestHBnBFacade(unittest.TestCase):
             'price': 100.0,
             'latitude': 37.7749,
             'longitude': -122.4194,
-            'owner': owner.id
+            'owner_id': owner.id
         })
 
         review = self.facade.create_review({

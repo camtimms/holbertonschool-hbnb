@@ -29,6 +29,14 @@ place_model = api.model('Place', {
 
 def serialize_place(place):
     """Helper function to serialize place object consistently"""
+    amenities_list = []
+    if hasattr(place, 'amenities') and place.amenities:
+        for amenity in place.amenities:
+            if hasattr(amenity, 'id'):
+                amenities_list.append(amenity.id)
+            else:
+                amenities_list.append(str(amenity))  # Assume it's already an ID
+
     return {
         'id': place.id,
         'title': place.title,
@@ -37,10 +45,10 @@ def serialize_place(place):
         'latitude': place.latitude,
         'longitude': place.longitude,
         'owner_id': place.owner.id,
-        'amenities': [amenity.id for amenity in place.amenities] if hasattr(place, 'amenities') else [],
-        'created_at': place.created_at.isoformat(),
-        'updated_at': place.updated_at.isoformat()
+        'amenities': amenities_list
     }
+
+
 @api.route('/')
 class PlaceList(Resource):
     @api.expect(place_model, validate=True)

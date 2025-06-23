@@ -26,8 +26,8 @@ class AmenityList(Resource):
     def get(self):
         """Retrieve a list of all amenities"""
         try:
-            amenity = facade.get_all_amenities()
-            return {'id': amenity.id, 'name': amenity.name}, 200
+            amenities = facade.get_all_amenities()
+            return [{'id': amenity.id, 'name': amenity.name} for amenity in amenities], 200
         except ValueError as e:
             return {'error': str(e)}, 404
 

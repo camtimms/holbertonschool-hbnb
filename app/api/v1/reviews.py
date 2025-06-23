@@ -14,6 +14,16 @@ review_model = api.model('Review', {
     'place_id': fields.String(required=True, description='ID of the place')
 })
 
+def serialize_review(review):
+    """Helper function to serialize review object consistently"""
+    return {
+        'id': review.id,
+        'text': review.text,
+        'rating': review.rating,
+        'user_id': review.user.id,
+        'place_id': review.place.id
+    }
+
 @api.route('/')
 class ReviewList(Resource):
     @api.expect(review_model)
@@ -25,7 +35,7 @@ class ReviewList(Resource):
         try:
             review_data = request.json
             new_review = facade.create_review(review_data)
-            return new_review, 201
+            return serialize_review(new_review), 201
         except ValueError as e:
             return {'error': str(e)}, 400
 
@@ -34,7 +44,7 @@ class ReviewList(Resource):
         """Retrieve a list of all reviews"""
 
         reviews = facade.get_all_reviews()
-        return reviews, 200
+        return [serialize_review(review) for review in reviews], 200
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
@@ -45,7 +55,7 @@ class ReviewResource(Resource):
 
         review = facade.get_review(review_id)
         if review:
-            return review, 200
+            return serialize_review(review), 200
         return {'error': 'Review not found'}, 404
 
     @api.expect(review_model)
@@ -59,7 +69,7 @@ class ReviewResource(Resource):
         try:
             updated_review = facade.update_review(review_id, review_data)
             if updated_review:
-                return updated_review, 200
+                return serialize_review(updated_review), 200
             return {'error': 'Review not found'}, 404
         except ValueError as e:
             return {'error': str(e)}, 400
@@ -86,4 +96,4 @@ class PlaceReviewList(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
         reviews = facade.get_reviews_by_place(place_id)
-        return reviews, 200
+        return [serialize_review(review) for review in reviews], 200

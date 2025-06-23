@@ -118,7 +118,8 @@ class HBnBFacade:
         check_id = self.amenity_repo.get(amenity_id)
         if check_id is None:
             raise ValueError (f"Amenity with ID {amenity_id} not found")
-        return self.amenity_repo.update(amenity_id, amenity_data)
+        self.amenity_repo.update(amenity_id, amenity_data)
+        return self.amenity_repo.get(amenity_id)
 
     # --- CRU Review ---
     def create_review(self, review_data):

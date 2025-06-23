@@ -24,6 +24,19 @@ def serialize_review(review):
         'place_id': review.place.id
     }
 
+@api.route('/places/<place_id>/reviews')
+class PlaceReviewList(Resource):
+    @api.response(200, 'List of reviews for the place retrieved successfully')
+    @api.response(404, 'Place not found')
+    def get(self, place_id):
+        """Get all reviews for a specific place"""
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+        reviews = facade.get_reviews_by_place(place_id)
+        return [serialize_review(review) for review in reviews], 200
+
 @api.route('/')
 class ReviewList(Resource):
     @api.expect(review_model)
@@ -84,16 +97,3 @@ class ReviewResource(Resource):
         if deleted:
             return {'message': 'Review deleted'}, 200
         return {'message': 'Review not found'}, 404
-
-@api.route('/places/<place_id>/reviews')
-class PlaceReviewList(Resource):
-    @api.response(200, 'List of reviews for the place retrieved successfully')
-    @api.response(404, 'Place not found')
-    def get(self, place_id):
-        """Get all reviews for a specific place"""
-
-        place = facade.get_place(place_id)
-        if not place:
-            return {'error': 'Place not found'}, 404
-        reviews = facade.get_reviews_by_place(place_id)
-        return [serialize_review(review) for review in reviews], 200

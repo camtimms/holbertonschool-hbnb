@@ -180,4 +180,8 @@ class HBnBFacade:
         return review
 
     def delete_review(self, review_id):
-        return self.review_repo.delete(review_id)
+        review = self.review_repo.get(review_id)
+        if review:
+            self.review_repo.delete(review_id)
+            return True
+        return False

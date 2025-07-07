@@ -1,5 +1,9 @@
 from flask import Flask
 from flask_restx import Api
+<<<<<<< HEAD
+=======
+from flask import Flask
+>>>>>>> refs/remotes/origin/main
 from flask_sqlalchemy import SQLAlchemy
 from app.api.v1.users import api as users_ns
 from app.api.v1.amenities import api as amenities_ns

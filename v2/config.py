@@ -6,7 +6,11 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sql:///development.db'
+    # For MySQL
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'DATABASE_URL',
+        'mysql://root:your_password@localhost:3306'
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {

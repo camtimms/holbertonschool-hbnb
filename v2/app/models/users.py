@@ -5,18 +5,25 @@ from app import db, bcrypt
 import re
 import uuid
 from . import BaseModel
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Boolean
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 
 class User(BaseModel):
    __tablename__ = 'users'
 
-   _first_name = db.Column(db.String(50), nullable=False)
-   _last_name = db.Column(db.String(50), nullable=False)
-   _email = db.Column(db.String(120), nullable=False, unique=True)
-   _password = db.Column(db.String(128), nullable=False)
-   _is_admin = db.Column(db.Boolean, default=False)
+   _first_name = db.Column("first_name",db.String(50), nullable=False)
+   _last_name = db.Column("last_name", db.String(50), nullable=False)
+   _email = db.Column("email", db.String(120), nullable=False, unique=True)
+   _password = db.Column("password", db.String(128), nullable=False)
+   _is_admin = db.Column("is_admin",db.Boolean, default=False)
+
+def __init__(self, first_name, last_name, email, is_admin = False):
+    super().__init__()
+    self.first_name = first_name
+    self.last_name = last_name
+    self.email = email
+    self.is_admin = is_admin #If user has admin privilages
 
 def hash_password(self, password):
     """Hash the password before storing it."""
@@ -53,7 +60,7 @@ def last_name(self, value):
         raise ValueError("Invalid name length")
 
 # getter and setter for email
-@hybrid_property
+@property
 def email(self):
     return self._email
 

@@ -12,19 +12,33 @@ from sqlalchemy.orm import relationship
 class Place(BaseModel):
     __tablename__ = 'places'
 
-    _title = db.Column(db.String(50), nullable = False)
-    _description = db.Column(db.String(500), nullable = False)
-    _price = db.Column(db.Numeric(10,2), nullable = False)
-    _latitude = db.Column(db.Float(), nullable = False)
-    _longitude = db.Column(db.Float(), nullable=False)
-    _owner = db.Column(db.String(50), ForeignKey('users.id', name = 'owner'))
+    title = db.Column(db.String(50), nullable = False)
+    description = db.Column(db.String(500), nullable = False)
+    price = db.Column(db.Numeric(10,2), nullable = False)
+    latitude = db.Column(db.Float(), nullable = False)
+    longitude = db.Column(db.Float(), nullable=False)
+    owner_id = db.Column(db.String(50), ForeignKey('users.id'), nullable=False)
 
     # Implement one to many relationship
-    _reviews = relationship('Review', back_populates='places', lazy=True)
-    _amenities = relationship('Amenity', back_populates='places', lazy=True)
+    reviews = relationship('Review', back_populates='places', lazy=True)
+    amenities = relationship('Amenity', back_populates='places', lazy=True)
+
+    def __init__(self, title, description, price, latitude, longitude, owner):
+        if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
+            raise ValueError("Required attributes not specified!")
+
+        super().__init__()
+        self.title = title
+        self.description = description
+        self.price = price
+        self.latitude = latitude
+        self.longitude = longitude
+        self.owner = owner
+        self.reviews = []  # List to store related reviews
+        self.amenities = []  # List to store related amenities
 
     # --- Getters and Setters ---
-    @hybrid_property
+    @property
     def title(self):
         """ Returns value of property title """
         return self._title
@@ -39,7 +53,7 @@ class Place(BaseModel):
         else:
             raise ValueError("Invalid title length!")
 
-    @hybrid_property
+    @property
     def description(self):
         """ Returns value of property description """
         return self._description
@@ -50,7 +64,7 @@ class Place(BaseModel):
         # Can't think of any special checks to perform here tbh
         self._description = value
 
-    @hybrid_property
+    @property
     def price(self):
         """ Returns value of property price """
         return self._price
@@ -63,7 +77,7 @@ class Place(BaseModel):
         else:
             raise ValueError("Invalid value specified for price")
 
-    @hybrid_property
+    @property
     def latitude(self):
         """ Returns value of property latitude """
         return self._latitude
@@ -76,7 +90,7 @@ class Place(BaseModel):
         else:
             raise ValueError("Invalid value specified for Latitude")
 
-    @hybrid_property
+    @property
     def longitude(self):
         """ Returns value of property longitude """
         return self._longitude
@@ -89,7 +103,7 @@ class Place(BaseModel):
         else:
             raise ValueError("Invalid value specified for Longitude")
 
-    @hybrid_property
+    @property
     def owner(self):
         """ Returns value of property owner """
         return self._owner

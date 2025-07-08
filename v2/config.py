@@ -9,9 +9,9 @@ class DevelopmentConfig(Config):
     # For MySQL
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        'mysql://root:your_password@localhost:3306'
+        'mysql+mysqldb://root:your_password@localhost:3306'
     )
-    
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {

@@ -11,6 +11,7 @@ class DevelopmentConfig(Config):
         'DATABASE_URL',
         'mysql://root:your_password@localhost:3306'
     )
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {

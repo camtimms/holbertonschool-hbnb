@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from app import db
-from app.persistence.repository import SQLAlchemyRepository
-from app.models import User, Place, Review, Amenity  # Import your models
+from app.models.users import User #, Place, Review, Amenity  # Import your models
 
 class Repository(ABC):
     @abstractmethod

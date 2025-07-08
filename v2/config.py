@@ -9,9 +9,9 @@ class DevelopmentConfig(Config):
     # For MySQL
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        'mysql://root:your_password@localhost:3306'
+        'mysql+mysqldb://root@localhost:3306/hbnb_db'
     )
-    
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {

@@ -32,7 +32,7 @@ class User(BaseModel):
         """Verify the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
 
-    # --- Getters and Setters
+    # --- Getters and Setters ---
     @property
     def first_name(self):
         return self._first_name

@@ -1,18 +1,38 @@
 """
 This is the user class
 """
-from . import BaseModel
+from app import db, bcrypt
 import re
+from . import BaseModel
+
 
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, is_admin = False):
+    __tablename__ = 'users'
+
+    _first_name = db.Column("first_name",db.String(50), nullable=False)
+    _last_name = db.Column("last_name", db.String(50), nullable=False)
+    _email = db.Column("email", db.String(120), nullable=False, unique=True)
+    _password = db.Column("password", db.String(128), nullable=False)
+    _is_admin = db.Column("is_admin",db.Boolean, default=False)
+
+    def __init__(self, first_name, last_name, email, password, is_admin = False):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.is_admin = is_admin #If user has admin privilages
+        if password:
+            self.hash_password(password)
+        self.is_admin = is_admin
 
-    #getter and setter for first_name
+    def hash_password(self, password):
+        """Hash the password before storing it."""
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        """Verify the hashed password."""
+        return bcrypt.check_password_hash(self.password, password)
+
+    # --- Getters and Setters ---
     @property
     def first_name(self):
         return self._first_name
@@ -25,7 +45,6 @@ class User(BaseModel):
         else:
             raise ValueError("Invalid name length")
 
-    #getter and setter for last_name
     @property
     def last_name(self):
         return self._last_name
@@ -38,7 +57,6 @@ class User(BaseModel):
         else:
             raise ValueError("Invalid name length")
 
-    #getter and setter for email
     @property
     def email(self):
         return self._email
@@ -51,7 +69,6 @@ class User(BaseModel):
         else:
             raise ValueError("Email not valid")
 
-    #getter and setter for is_admin (boolean) FIX THIS ONE
     @property
     def is_admin(self):
         return self._is_admin

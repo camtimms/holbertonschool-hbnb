@@ -32,10 +32,9 @@ def create_app(config_class="config.DevelopmentConfig"):
     with app.app_context():
         # Import all models to ensure they're registered
         from app.models.users import User
-        # Uncomment when you implement other models:
         from app.models.places import Place
-        # from app.models.reviews import Review
-        # from app.models.amenity import Amenity
+        from app.models.reviews import Review
+        from app.models.amenity import Amenity
 
         # Create tables if they don't exist
         db.create_all()

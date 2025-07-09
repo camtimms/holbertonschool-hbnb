@@ -4,21 +4,20 @@ This is a review class
 from . import BaseModel
 from app.models.places import Place
 from app.models.users import User
-from app import db, bcrypt
+from app import db
 from sqlalchemy.orm import relationship
 
 class Review(BaseModel):
     __tablename__ = 'reviews'
 
-    id
     _text = db.Column('text', db.String(500), nullable=False)
     _rating = db.Column('rating', db.Integer, nullable=False)
-    _place_id = db.Column('place_id', db.Integer, db.ForeignKey('places.id'), nullable=False)
-    _user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False)
+    _place_id = db.Column('place_id', db.String(36), db.ForeignKey('places.id'), nullable=False)
+    _user_id = db.Column('user_id', db.String(36), db.ForeignKey('users.id'), nullable=False)
 
-    #relationships
+    # Relationships
     place = db.relationship('Place', back_populates='reviews', lazy=True)
-    user = db.relationship('User', back_populates='reviews', lazy=True) 
+    user = db.relationship('User', back_populates='reviews', lazy=True)
 
     def __init__(self, text, rating, place, user):
         super().__init__()

@@ -33,7 +33,7 @@ def create_app(config_class="config.DevelopmentConfig"):
         # Import all models to ensure they're registered
         from app.models.users import User
         # Uncomment when you implement other models:
-        # from app.models.places import Place
+        from app.models.places import Place
         # from app.models.reviews import Review
         # from app.models.amenity import Amenity
 

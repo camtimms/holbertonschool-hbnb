@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from app import db  # Assuming you have set up SQLAlchemy in your Flask app
-from app.models import User, Place, Review, Amenity  # Import your models
+from app import db
+from app.models.users import User #, Place, Review, Amenity  # Import your models
 
 class Repository(ABC):
     @abstractmethod
@@ -26,6 +26,7 @@ class Repository(ABC):
     @abstractmethod
     def get_by_attribute(self, attr_name, attr_value):
         pass
+
 
 class SQLAlchemyRepository(Repository):
     def __init__(self, model):
@@ -56,3 +57,11 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
+
+
+class UserRepository(SQLAlchemyRepository):
+    def __init__(self):
+        super().__init__(User)
+
+    def get_user_by_email(self, email):
+        return self.model.query.filter_by(email=email).first()

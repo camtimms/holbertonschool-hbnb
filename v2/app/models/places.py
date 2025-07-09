@@ -3,9 +3,26 @@ This is a place class
 """
 from . import BaseModel
 from app.models.users import User
+from app import db
+from sqlalchemy import ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel):
+    __tablename__ = 'places'
+
+    title = db.Column(db.String(50), nullable = False)
+    description = db.Column(db.String(500), nullable = False)
+    price = db.Column(db.Numeric(10,2), nullable = False)
+    latitude = db.Column(db.Float(), nullable = False)
+    longitude = db.Column(db.Float(), nullable=False)
+    owner_id = db.Column(db.String(50), ForeignKey('users.id'), nullable=False)
+
+    # Implement one to many relationship
+    reviews = relationship('Review', back_populates='places', lazy=True)
+    amenities = relationship('Amenity', back_populates='places', lazy=True)
+
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
             raise ValueError("Required attributes not specified!")

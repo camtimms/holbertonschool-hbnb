@@ -15,7 +15,6 @@ class HBnBFacade:
     # --- CRU User ---
     def create_user(self, user_data):
         user = User(**user_data)
-        user.hash_password(user_data['password'])   # to be implemented
         self.user_repo.add(user)
         return user
 

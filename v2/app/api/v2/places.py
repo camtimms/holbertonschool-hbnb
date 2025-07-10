@@ -41,7 +41,7 @@ def serialize_place(place):
         'id': place.id,
         'title': place.title,
         'description': place.description,
-        'price': place.price,
+        'price': float(place.price),
         'latitude': place.latitude,
         'longitude': place.longitude,
         'owner_id': place.owner.id,

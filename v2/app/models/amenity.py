@@ -1,9 +1,27 @@
+
 """
 This is a amenity class
 """
+from app import db
+from sqlalchemy.orm import relationship
+from sqlalchemy import Table, Column, Integer, ForeignKey
 from . import BaseModel
 
+# Association table for many-to-many relationship
+place_amenity_asc = db.Table('place_amenity_asc',
+    Column('amenity_id', Integer, ForeignKey('amenities.id'), primary_key=True),
+    Column('place_id', Integer, ForeignKey('places.id'), primary_key=True)
+)
+
+
 class Amenity(BaseModel):
+    __tablename__ = 'amenties'
+
+    _name = db.Column("name", db.String(50), nullable=False)
+
+    places = relationship('Place', secondary=place_amenity_asc, lazy='subquery',
+                           back_populates='amenities', lazy=True)
+
     def __init__(self, name):
         super().__init__()
         self.name = name

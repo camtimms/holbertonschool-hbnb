@@ -19,9 +19,10 @@ class Place(BaseModel):
     _longitude = db.Column("longitude", db.Float(), nullable=False)
     _owner_id = db.Column("owner_id", db.String(36), ForeignKey('users.id'), nullable=False)
 
-    # Implement one to many relationship
-    reviews = relationship('Review', back_populates='places', lazy=True)
-    amenities = relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
+    # Implement relationships
+    _owner = db.relationship('User', back_populates='places', lazy=True)
+    _reviews = db.relationship('Review', back_populates='places', lazy=True)
+    _amenities = db.relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:

@@ -19,7 +19,7 @@ class Amenity(BaseModel):
 
     _name = db.Column("name", db.String(50), nullable=False)
 
-    places = relationship('Place', secondary=place_amenity_asc,
+    _places = relationship('Place', secondary=place_amenity_asc,
                            back_populates='amenities', lazy=True)
 
     def __init__(self, name):

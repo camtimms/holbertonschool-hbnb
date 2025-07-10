@@ -17,8 +17,8 @@ class User(BaseModel):
     _is_admin = db.Column("is_admin", db.Boolean, default=False)
 
     # Add these relationships after your existing column definitions
-    places = relationship('Place', back_populates='owner', lazy=True)
-    reviews = relationship('Review', back_populates='user', lazy=True)
+    _places = relationship('Place', back_populates='owner', lazy=True)
+    _reviews = relationship('Review', back_populates='user', lazy=True)
 
     def __init__(self, first_name, last_name, email, password, is_admin = False):
         super().__init__()

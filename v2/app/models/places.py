@@ -6,6 +6,7 @@ from app.models.users import User
 from app import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from app.models.amenity import place_amenity_asc
 
 
 class Place(BaseModel):
@@ -20,7 +21,7 @@ class Place(BaseModel):
 
     # Implement one to many relationship
     reviews = relationship('Review', back_populates='places', lazy=True)
-    amenities = relationship('Amenity', back_populates='places', lazy=True)
+    amenities = relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:

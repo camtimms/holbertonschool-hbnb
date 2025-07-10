@@ -21,7 +21,7 @@ class Place(BaseModel):
 
     # Implement relationships
     owner = db.relationship('User', back_populates='places', lazy=True)
-    reviews = db.relationship('Review', back_populates='places', lazy=True)
+    reviews = db.relationship('Review', back_populates='place', lazy=True)
     amenities = db.relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
     def __init__(self, title, description, price, latitude, longitude, owner):

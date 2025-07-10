@@ -16,7 +16,7 @@ class Review(BaseModel):
     _user_id = db.Column('user_id', db.String(36), db.ForeignKey('users.id'), nullable=False)
 
     # Relationships
-    places = db.relationship('Place', back_populates='reviews', lazy=True)
+    place = db.relationship('Place', back_populates='reviews', lazy=True)
     user = db.relationship('User', back_populates='reviews', lazy=True)
 
     def __init__(self, text, rating, place, user):

@@ -20,9 +20,9 @@ class Place(BaseModel):
     _owner_id = db.Column("owner_id", db.String(36), ForeignKey('users.id'), nullable=False)
 
     # Implement relationships
-    _owner = db.relationship('User', back_populates='places', lazy=True)
-    _reviews = db.relationship('Review', back_populates='places', lazy=True)
-    _amenities = db.relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
+    owner = db.relationship('User', back_populates='places', lazy=True)
+    reviews = db.relationship('Review', back_populates='places', lazy=True)
+    amenities = db.relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
@@ -35,8 +35,6 @@ class Place(BaseModel):
         self.latitude = latitude
         self.longitude = longitude
         self.owner = owner
-        self.reviews = []  # List to store related reviews
-        self.amenities = []  # List to store related amenities
 
     # --- Getters and Setters ---
     @property
@@ -103,19 +101,6 @@ class Place(BaseModel):
             self._longitude = value
         else:
             raise ValueError("Invalid value specified for Longitude")
-
-    @property
-    def owner(self):
-        """ Returns value of property owner """
-        return self._owner
-
-    @owner.setter
-    def owner(self, value):
-        """Setter for prop owner"""
-        if isinstance(value, User):
-            self._owner = value
-        else:
-            raise ValueError("Invalid object type passed in for owner!")
 
     # --- Methods ---
     def add_review(self, review):

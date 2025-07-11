@@ -62,24 +62,23 @@ class UserResource(Resource):
     @api.response(400, 'Invalid input data')
     @login_required
     def put(self, user_id):
-        """Update a users information"""
-        # Check if user exists
+        """Update a user's information"""
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
         cur_user = session['user_id']
-        # Check if user_id matches the current user
-        if user_id != cur_user:
+        is_admin = session.get('is_admin', False)
+
+        if not is_admin and str(user_id) != str(cur_user):
             return {'error': 'This profile does not belong to you'}, 401
 
         try:
             user_data = api.payload
 
-            # If email is being updated, check if it's already taken by another user
-            if 'email' in user_data['email'] != user.email:
+            if 'email' in user_data and user_data['email'] != user.email:
                 existing_user = facade.get_user_by_email(user_data['email'])
-                if existing_user.id != user_id:
+                if existing_user and str(existing_user.id) != str(user_id):
                     return {'error': 'Email already registered'}, 400
 
             updated_user = facade.update_user(user_id, user_data)
@@ -94,6 +93,7 @@ class UserResource(Resource):
         except ValueError as e:
             return {'error': str(e)}, 400
 
+
     @api.response(200, 'User deleted successfully')
     @api.response(401, 'This profile does not belong to you')
     @api.response(404, 'User not found')
@@ -101,9 +101,10 @@ class UserResource(Resource):
     def delete(self, user_id):
         """Delete a user account"""
         cur_user = session['user_id']
+        is_admin = session.get('is_admin', False)
 
-        # Check if user_id matches the current user
-        if user_id != cur_user:
+         # Allow delete if admin or self
+        if not is_admin and str(user_id) != str(cur_user):
             return {'error': 'This profile does not belong to you'}, 401
 
         # Check if user exists

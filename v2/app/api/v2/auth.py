@@ -28,7 +28,7 @@ class Login(Resource):
             return {'error': 'Invalid email or password'}, 401
 
         session['user_id'] = user.id
-        session['is_admin'] = (user.role == 'admin') # added admin 
+        session['is_admin'] = (user.is_admin == 'admin') # added admin
 
         return {'message': 'Logged in successfully'}, 200
 

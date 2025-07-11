@@ -55,7 +55,7 @@ class ReviewList(Resource):
     def post(self): # added session auth
         """Register a new review"""
         user_id = session['user_id']
-        review_data = request.get_json
+        review_data = request.get_json()
 
         # Prevent review of own place
         place = facade.get_place(review_data['place_id'])
@@ -63,7 +63,7 @@ class ReviewList(Resource):
             return {'error': 'Place not found'}, 404
         if place.owner.id == user_id:
             return {'error': 'You cannot review your own place'}, 403
-        
+
         #Prevent duplicate reviews from same user
         existing_reviews = facade.get_reviews_by_place(review_data['place_id'])
         if any(r.user.id == user_id for r in existing_reviews):
@@ -114,7 +114,7 @@ class ReviewResource(Resource):
         if review.user.id != user_id:
             return {'error': 'You can only edit your own review'}, 403
 
-        review_data = request.json()
+        review_data = request.get_json()
 
         try:
             updated_review = facade.update_review(review_id, review_data)

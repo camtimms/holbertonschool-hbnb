@@ -4,6 +4,7 @@ from app.models.users import User
 from app.models.reviews import Review
 from app.models.amenity import Amenity
 from app.persistence.repository import UserRepository
+from app import db
 
 class HBnBFacade:
     def __init__(self):
@@ -22,7 +23,64 @@ class HBnBFacade:
         return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-        return self.user_repo.get_by_attribute('email', email)
+        return self.user_repo.get_user_by_email(email)
+
+    def update_user(self, user_id, user_data):
+        """Update user information"""
+        user = self.user_repo.get(user_id)
+        if not user:
+            return None
+
+        # Handle password hashing if password is being updated
+        if 'password' in user_data:
+            user.hash_password(user_data['password'])
+            # Remove password from user_data to avoid setting it directly
+            user_data_copy = user_data.copy()
+            user_data_copy.pop('password')
+            user_data = user_data_copy
+
+        # Update other fields
+        for key, value in user_data.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+
+        # Save changes to database
+        from app import db
+        db.session.commit()
+
+        return user
+
+    def delete_user(self, user_id):
+        """Delete a user and handle cascading deletions"""
+        user = self.user_repo.get(user_id)
+        if not user:
+            return False
+
+        try:
+            # Handle cascade deletions manually if needed
+            # Delete user's reviews first
+            user_reviews = [review for review in self.review_repo.get_all() if review.user.id == user_id]
+            for review in user_reviews:
+                db.session.delete(review)
+
+            # Delete user's places (this will also handle place-related reviews)
+            user_places = [place for place in self.place_repo.get_all() if place.owner.id == user_id]
+            for place in user_places:
+                # Delete reviews for this place
+                place_reviews = [review for review in self.review_repo.get_all() if review.place.id == place.id]
+                for review in place_reviews:
+                    db.session.delete(review)
+                # Delete the place
+                db.session.delete(place)
+
+            # Finally delete the user
+            db.session.delete(user)
+            db.session.commit()
+
+            return True
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Error deleting user: {str(e)}")
 
     # --- CRU Place ---
     def create_place(self, place_data):

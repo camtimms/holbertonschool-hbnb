@@ -64,4 +64,6 @@ class UserRepository(SQLAlchemyRepository):
         super().__init__(User)
 
     def get_user_by_email(self, email):
-        return self.model.query.filter_by(email=email).first()
+        # Query the actual database column directly instead of the property
+        result = self.model.query.filter(self.model._email == email).first()
+        return result

@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
+from flask import request, session
 from app.services import facade
-from werkzeug.security import generate_password_hash
+from functools import wraps
 
 api = Namespace('users', description='User operations')
 
@@ -11,6 +12,14 @@ user_model = api.model('User', {
     'email': fields.String(required=True, description='Email of the user'),
     'password': fields.String(required=True, description='User password', min_length=6)
 })
+
+def login_required(f): # login wrap
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user_id' not in session:
+            return {'error': 'Authentication required'}, 401
+        return f(*args, **kwargs)
+    return decorated
 
 @api.route('/')
 class UserList(Resource):
@@ -40,3 +49,18 @@ class UserResource(Resource):
         if not user:
             return {'error': 'User not found'}, 404
         return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 200
+
+    @api.response(401, 'This profile does not belong to you')
+    @login_required
+    def put(self, user_id):
+        """Update a users information"""
+        cur_user = session['user_id']
+
+        # Check if user_id matches the current user
+        if user_id != cur_user:
+            return {'error': 'This profile does not belong to you'}, 401
+
+        try:
+
+        except:
+

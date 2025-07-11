@@ -138,11 +138,36 @@ class HBnBFacade:
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        # Check if place_id already exists
-        check_id = self.place_repo.get(place_id)
-        if check_id is None:
-            raise ValueError (f"Place with ID {place_id} not found")
-        self.place_repo.update(place_id, place_data)
+        """Update place information, handling relationships properly"""
+        # Check if place exists
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError(f"Place with ID {place_id} not found")
+
+        # Handle amenities separately if they're in the update data
+        if 'amenities' in place_data:
+            amenity_ids = place_data.pop('amenities')  # Remove from place_data
+
+            # Convert amenity IDs to actual amenity objects
+            amenities = []
+            for amenity_id in amenity_ids:
+                amenity = self.amenity_repo.get(amenity_id)
+                if not amenity:
+                    raise ValueError(f"Amenity with ID {amenity_id} not found")
+                amenities.append(amenity)
+
+            # Update the amenities relationship
+            place.amenities = amenities
+
+        # Update other fields using the repository
+        if place_data:  # Only call update if there are other fields to update
+            self.place_repo.update(place_id, place_data)
+
+        # If we only updated amenities, we still need to commit the changes
+        if 'amenities' in locals():
+            from app import db
+            db.session.commit()
+
         return self.place_repo.get(place_id)
 
 

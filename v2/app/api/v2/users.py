@@ -42,18 +42,28 @@ class UserList(Resource):
 @api.route('/<user_id>')
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')
+    @api.response(401, 'Authentication required')
+    @api.response(403, 'Access denied')
     @api.response(404, 'User not found')
+    @login_required
     def get(self, user_id):
-        """Get user details by ID"""
+        """Get user details by ID (user or admin only)"""
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
+
+        cur_user = session['user_id']
+        is_admin = session.get('is_admin', False)
+
+        if not is_admin and str(user_id) != str(cur_user):
+            return {'error': 'Access denied'}, 403
+
         return {
             'id': user.id,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email
-            }, 200
+        }, 200
 
     @api.response(200, 'User updated successfully')
     @api.response(401, 'This profile does not belong to you')
@@ -62,24 +72,23 @@ class UserResource(Resource):
     @api.response(400, 'Invalid input data')
     @login_required
     def put(self, user_id):
-        """Update a users information"""
-        # Check if user exists
+        """Update a user's information"""
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
         cur_user = session['user_id']
-        # Check if user_id matches the current user
-        if user_id != cur_user:
-            return {'error': 'This profile does not belong to you'}, 401
+        is_admin = session.get('is_admin', False)
+
+        if not is_admin and str(user_id) != str(cur_user):
+            return {'error': 'Access denied'}, 401
 
         try:
             user_data = api.payload
 
-            # If email is being updated, check if it's already taken by another user
-            if 'email' in user_data['email'] != user.email:
+            if 'email' in user_data and user_data['email'] != user.email:
                 existing_user = facade.get_user_by_email(user_data['email'])
-                if existing_user.id != user_id:
+                if existing_user and str(existing_user.id) != str(user_id):
                     return {'error': 'Email already registered'}, 400
 
             updated_user = facade.update_user(user_id, user_data)
@@ -94,6 +103,7 @@ class UserResource(Resource):
         except ValueError as e:
             return {'error': str(e)}, 400
 
+
     @api.response(200, 'User deleted successfully')
     @api.response(401, 'This profile does not belong to you')
     @api.response(404, 'User not found')
@@ -101,9 +111,10 @@ class UserResource(Resource):
     def delete(self, user_id):
         """Delete a user account"""
         cur_user = session['user_id']
+        is_admin = session.get('is_admin', False)
 
-        # Check if user_id matches the current user
-        if user_id != cur_user:
+         # Allow delete if admin or self
+        if not is_admin and str(user_id) != str(cur_user):
             return {'error': 'This profile does not belong to you'}, 401
 
         # Check if user exists

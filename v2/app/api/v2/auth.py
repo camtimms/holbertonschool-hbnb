@@ -28,6 +28,8 @@ class Login(Resource):
             return {'error': 'Invalid email or password'}, 401
 
         session['user_id'] = user.id
+        session['is_admin'] = (user.role == 'admin') # added admin 
+
         return {'message': 'Logged in successfully'}, 200
 
 @auth_api.route('/protected') # protected endpoint that can only be called by user

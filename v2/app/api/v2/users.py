@@ -42,18 +42,28 @@ class UserList(Resource):
 @api.route('/<user_id>')
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')
+    @api.response(401, 'Authentication required')
+    @api.response(403, 'Access denied')
     @api.response(404, 'User not found')
+    @login_required
     def get(self, user_id):
-        """Get user details by ID"""
+        """Get user details by ID (user or admin only)"""
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
+
+        cur_user = session['user_id']
+        is_admin = session.get('is_admin', False)
+
+        if not is_admin and str(user_id) != str(cur_user):
+            return {'error': 'Access denied'}, 403
+
         return {
             'id': user.id,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email
-            }, 200
+        }, 200
 
     @api.response(200, 'User updated successfully')
     @api.response(401, 'This profile does not belong to you')
@@ -71,7 +81,7 @@ class UserResource(Resource):
         is_admin = session.get('is_admin', False)
 
         if not is_admin and str(user_id) != str(cur_user):
-            return {'error': 'This profile does not belong to you'}, 401
+            return {'error': 'Access denied'}, 401
 
         try:
             user_data = api.payload

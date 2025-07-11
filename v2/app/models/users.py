@@ -4,16 +4,21 @@ This is the user class
 from app import db, bcrypt
 import re
 from . import BaseModel
+from sqlalchemy.orm import relationship
 
 
 class User(BaseModel):
     __tablename__ = 'users'
 
-    _first_name = db.Column("first_name",db.String(50), nullable=False)
+    _first_name = db.Column("first_name", db.String(50), nullable=False)
     _last_name = db.Column("last_name", db.String(50), nullable=False)
     _email = db.Column("email", db.String(120), nullable=False, unique=True)
     _password = db.Column("password", db.String(128), nullable=False)
-    _is_admin = db.Column("is_admin",db.Boolean, default=False)
+    _is_admin = db.Column("is_admin", db.Boolean, default=False)
+
+    # Add these relationships after your existing column definitions
+    places = relationship('Place', back_populates='owner', lazy=True)
+    reviews = relationship('Review', back_populates='user', lazy=True)
 
     def __init__(self, first_name, last_name, email, password, is_admin = False):
         super().__init__()
@@ -68,6 +73,14 @@ class User(BaseModel):
             self._email = value.strip()
         else:
             raise ValueError("Email not valid")
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        self._password = value
 
     @property
     def is_admin(self):

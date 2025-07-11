@@ -1,5 +1,7 @@
 from flask_restx import Namespace, Resource, fields
+from flask import request, session
 from app.services import facade
+from functools import wraps
 
 api = Namespace('places', description='Place operations')
 
@@ -41,23 +43,34 @@ def serialize_place(place):
         'id': place.id,
         'title': place.title,
         'description': place.description,
-        'price': place.price,
+        'price': float(place.price),
         'latitude': place.latitude,
         'longitude': place.longitude,
         'owner_id': place.owner.id,
         'amenities': amenities_list
     }
 
+def login_required(f): # login wrap
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user_id' not in session:
+            return {'error': 'Authentication required'}, 401
+        return f(*args, **kwargs)
+    return decorated
 
 @api.route('/')
 class PlaceList(Resource):
     @api.expect(place_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @login_required
     def post(self):
         """Register a new place"""
+        user_id = session['user_id']
         try:
             place_data = api.payload
+            # Force the owner_id to be the authenticated user
+            place_data['owner_id'] = user_id
             new_place = facade.create_place(place_data)
             return serialize_place(new_place), 201
         except ValueError as e:
@@ -88,8 +101,19 @@ class PlaceResource(Resource):
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
+    @api.response(403, 'You cannot update a palce you don\'t own')
+    @login_required
     def put(self, place_id):
         """Update a place's information"""
+        user_id = session['user_id']
+
+        # Prevent review of own place
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+        if place.owner.id != user_id:
+            return {'error': 'You cannot update a palce you don\'t own'}, 403
+
         try:
             place_data = api.payload
             updated_place = facade.update_place(place_id, place_data)

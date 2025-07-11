@@ -5,23 +5,24 @@ from . import BaseModel
 from app.models.users import User
 from app import db
 from sqlalchemy import ForeignKey
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
+from app.models.amenity import place_amenity_asc
 
 
 class Place(BaseModel):
     __tablename__ = 'places'
 
-    title = db.Column(db.String(50), nullable = False)
-    description = db.Column(db.String(500), nullable = False)
-    price = db.Column(db.Numeric(10,2), nullable = False)
-    latitude = db.Column(db.Float(), nullable = False)
-    longitude = db.Column(db.Float(), nullable=False)
-    owner_id = db.Column(db.String(50), ForeignKey('users.id'), nullable=False)
+    _title = db.Column("title", db.String(50), nullable = False)
+    _description = db.Column("description", db.String(500), nullable = False)
+    _price = db.Column("price", db.Numeric(10,2), nullable = False)
+    _latitude = db.Column("latitude", db.Float(), nullable = False)
+    _longitude = db.Column("longitude", db.Float(), nullable=False)
+    _owner_id = db.Column("owner_id", db.String(36), ForeignKey('users.id'), nullable=False)
 
-    # Implement one to many relationship
-    reviews = relationship('Review', back_populates='places', lazy=True)
-    amenities = relationship('Amenity', back_populates='places', lazy=True)
+    # Implement relationships
+    owner = db.relationship('User', back_populates='places', lazy=True)
+    reviews = db.relationship('Review', back_populates='place', lazy=True)
+    amenities = db.relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
@@ -34,8 +35,6 @@ class Place(BaseModel):
         self.latitude = latitude
         self.longitude = longitude
         self.owner = owner
-        self.reviews = []  # List to store related reviews
-        self.amenities = []  # List to store related amenities
 
     # --- Getters and Setters ---
     @property
@@ -102,19 +101,6 @@ class Place(BaseModel):
             self._longitude = value
         else:
             raise ValueError("Invalid value specified for Longitude")
-
-    @property
-    def owner(self):
-        """ Returns value of property owner """
-        return self._owner
-
-    @owner.setter
-    def owner(self, value):
-        """Setter for prop owner"""
-        if isinstance(value, User):
-            self._owner = value
-        else:
-            raise ValueError("Invalid object type passed in for owner!")
 
     # --- Methods ---
     def add_review(self, review):

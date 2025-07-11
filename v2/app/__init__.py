@@ -34,20 +34,19 @@ def create_app(config_class="config.DevelopmentConfig"):
     from app.api.v2.reviews import api as reviews_ns
     from app.api.v2.auth import auth_api #being added auth file
 
-    api.add_namespace(users_ns, path="/api/v1/users")
-    api.add_namespace(amenities_ns, path="/api/v1/amenities")
-    api.add_namespace(places_ns, path="/api/v1/places")
-    api.add_namespace(reviews_ns, path="/api/v1/reviews")
-    api.add_namespace(auth_api, path="/api/v1/auth") #added name space for auth
+    api.add_namespace(users_ns, path="/api/v2/users")
+    api.add_namespace(amenities_ns, path="/api/v2/amenities")
+    api.add_namespace(places_ns, path="/api/v2/places")
+    api.add_namespace(reviews_ns, path="/api/v2/reviews")
+    api.add_namespace(auth_api, path="/api/v2/auth") #added name space for auth
 
     # Create database tables within app context
     with app.app_context():
         # Import all models to ensure they're registered
         from app.models.users import User
-        # Uncomment when you implement other models:
-        # from app.models.places import Place
-        # from app.models.reviews import Review
-        # from app.models.amenity import Amenity
+        from app.models.places import Place
+        from app.models.reviews import Review
+        from app.models.amenity import Amenity
 
         # Create tables if they don't exist
         db.create_all()

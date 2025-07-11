@@ -2,7 +2,6 @@ from flask_restx import Namespace, Resource, fields
 from flask import session
 from functools import wraps
 from app.services import facade
-from werkzeug.security import check_password_hash
 
 auth_api = Namespace('auth', description='Authentication operations')
 
@@ -25,7 +24,7 @@ class Login(Resource):
     def post(self):
         data = auth_api.payload
         user = facade.get_user_by_email(data['email']) # get user by email obj
-        if not user or not check_password_hash(user.password, data['password']): # call verify method on user
+        if not user or not user.verify_password(data['password']): # call verify method on user
             return {'error': 'Invalid email or password'}, 401
 
         session['user_id'] = user.id

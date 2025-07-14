@@ -4,22 +4,27 @@ This is a review class
 from . import BaseModel
 from app.models.places import Place
 from app.models.users import User
+from app import db
+from sqlalchemy.orm import relationship
 
 class Review(BaseModel):
+    __tablename__ = 'reviews'
+
+    _text = db.Column('text', db.String(500), nullable=False)
+    _rating = db.Column('rating', db.Integer, nullable=False)
+    _place_id = db.Column('place_id', db.String(36), db.ForeignKey('places.id'), nullable=False)
+    _user_id = db.Column('user_id', db.String(36), db.ForeignKey('users.id'), nullable=False)
+
+    # Relationships
+    place = db.relationship('Place', back_populates='reviews', lazy=True)
+    user = db.relationship('User', back_populates='reviews', lazy=True)
+
     def __init__(self, text, rating, place, user):
         super().__init__()
         self.text = text
         self.rating = rating
         self.place = place
         self.user = user
-        self.replies = []
-
-    # --- Method ---
-    def add_reply(self, reply):
-        """Add a reply to review"""
-        if not isinstance(reply, str) or not reply.strip():
-            raise ValueError("Reply must be a non-empty string.")
-        self.replies.append(reply.strip())
 
     # --- Getters and Setters ---
     @property
@@ -49,30 +54,3 @@ class Review(BaseModel):
         else:
             raise ValueError("Rating must be between 0 and 5.")
 
-    @property
-    def place(self):
-        """returns place of review"""
-        return self._place
-
-    @place.setter
-    def place(self, value):
-        """sets place of review"""
-
-        if not isinstance(value, Place):
-            raise ValueError("Place must be a Place object.")
-
-        self._place = value
-
-    @property
-    def user(self):
-        """returns user of review"""
-        return self._user
-
-    @user.setter
-    def user(self, value):
-
-        """sets user of review"""
-        if not isinstance(value, User):
-            raise ValueError("User must be a User object.")
-
-        self._user = value

@@ -1,15 +1,14 @@
 from flask_restx import Namespace, Resource, fields
-
-from flask import request
-
+from flask import request, session
 from app.services import facade
+from functools import wraps
 
 api = Namespace('reviews', description='Review operations')
 
 # Define the review model for input validation and documentation
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
-    'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
+    'rating': fields.Integer(required=True, description='Rating (1-5)'),
     'user_id': fields.String(required=True, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
 })
@@ -23,6 +22,14 @@ def serialize_review(review):
         'user_id': review.user.id,
         'place_id': review.place.id
     }
+
+def login_required(f): # login wrap
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user_id' not in session:
+            return {'error': 'Authentication required'}, 401
+        return f(*args, **kwargs)
+    return decorated
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):
@@ -39,14 +46,32 @@ class PlaceReviewList(Resource):
 
 @api.route('/')
 class ReviewList(Resource):
-    @api.expect(review_model)
+    @api.expect(review_model, validate=True)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    def post(self):
+    @api.response(403, 'You cannot review your own place')
+    @api.response(409, 'You have already reviewed this place')
+    @login_required
+    def post(self): # added session auth
         """Register a new review"""
+        user_id = session['user_id']
+        review_data = request.get_json()
+
+        # Prevent review of own place
+        place = facade.get_place(review_data['place_id'])
+        if not place:
+            return {'error': 'Place not found'}, 404
+        if place.owner.id == user_id:
+            return {'error': 'You cannot review your own place'}, 403
+
+        #Prevent duplicate reviews from same user
+        existing_reviews = facade.get_reviews_by_place(review_data['place_id'])
+        if any(r.user.id == user_id for r in existing_reviews):
+            return {'error': 'You have already reviewed this place'}, 409
+
+        review_data['user_id'] = user_id
 
         try:
-            review_data = request.json
             new_review = facade.create_review(review_data)
             return serialize_review(new_review), 201
         except ValueError as e:
@@ -63,6 +88,7 @@ class ReviewList(Resource):
 class ReviewResource(Resource):
     @api.response(200, 'Review details retrieved successfully')
     @api.response(404, 'Review not found')
+
     def get(self, review_id):
         """Get review details by ID"""
 
@@ -75,10 +101,21 @@ class ReviewResource(Resource):
     @api.response(200, 'Review updated successfully')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
-    def put(self, review_id):
+    @api.response(403, 'You can only edit your own review')
+    @login_required
+    def put(self, review_id): # added session auth
         """Update a review's information"""
+        user_id = session['user_id']
+        review = facade.get_review(review_id)
 
-        review_data = request.json
+        if not review:
+            return {'error': 'Review not found'}, 404
+
+        if review.user.id != user_id:
+            return {'error': 'You can only edit your own review'}, 403
+
+        review_data = request.get_json()
+
         try:
             updated_review = facade.update_review(review_id, review_data)
             if updated_review:
@@ -90,8 +127,18 @@ class ReviewResource(Resource):
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
-    def delete(self, review_id):
+    @api.response(403, 'You can only delete your own review')
+    @login_required
+    def delete(self, review_id): # added session auth
         """Delete a review"""
+        user_id = session['user_id']
+        review = facade.get_review(review_id)
+
+        if not review:
+            return {'error': 'Review not found'}, 404
+
+        if review.user.id != user_id:
+            return {'error': 'You can only delete your own review'}, 403
 
         deleted = facade.delete_review(review_id)
         if deleted:

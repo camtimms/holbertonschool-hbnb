@@ -1,13 +1,14 @@
+// card scroll functions
 function scrollBack() {
   const row = document.getElementById('cardRow');
   console.log('scrollLeft clicked, scrollLeft =', row.scrollLeft);
-  row.scrollBy({ left: -340, behavior: 'smooth' });
+  row.scrollBy({ left: -365, behavior: 'smooth' });
 }
 
 function scrollRight() {
   const row = document.getElementById('cardRow');
   console.log('scrollRight clicked, scrollLeft =', row.scrollLeft);
-  row.scrollBy({ left: 340, behavior: 'smooth' });
+  row.scrollBy({ left: 365, behavior: 'smooth' });
 }
 
 const places = [
@@ -18,7 +19,7 @@ const places = [
 ];
 
 const cardRow = document.getElementById('cardRow');
-
+// dynamic creation of cards
 places.forEach(place => {
   const card = document.createElement('div');
   card.className = 'place-card';
@@ -63,7 +64,7 @@ places.forEach(place => {
   cardRow.appendChild(card);
 });
 
-
+// dynamic filtering
 document.getElementById('filter').addEventListener('change', function() {
   const maxPrice = Number(this.value);
   const cards = document.querySelectorAll('.place-card');
@@ -75,6 +76,71 @@ document.getElementById('filter').addEventListener('change', function() {
     } else {
       card.style.display = 'none'; // hide card
     }
+  });
+});
+
+// login required
+fetch('/auth/protected', {
+    method: 'GET',
+    credentials: 'include' // send session cookie
+})
+.then(response => {
+    if (response.status === 401) {
+        console.log('Not logged in');
+        // Redirect to login page or show login form
+    } else {
+        return response.json();
+    }
+})
+.then(data => {
+    if (data) {
+        console.log('User is logged in:', data);
+        // Update UI with user info
+    }
+})
+.catch(err => console.error('Error checking login:', err));
+// post request for login
+fetch('/auth/login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    credentials: 'include', // Important for sessions
+    body: JSON.stringify({
+        email: 'user@example.com',
+        password: 'mypassword'
+    })
+})
+.then(res => res.json())
+.then(data => {
+    console.log(data);
+    if (data.error) {
+        alert('Login failed');
+    } else {
+        alert('Login successful');
+    }
+});
+// remove login button if logged in
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/auth/protected", {
+    method: "GET",
+    credentials: "include" // for session cookies
+  })
+  .then(res => {
+    if (res.status === 200) {
+      return res.json();
+    } else {
+      throw new Error("Not logged in");
+    }
+  })
+  .then(user => {
+    console.log("Logged in as:", user.first_name);
+    document.getElementById("loginBtn").style.display = "none"; // hide login button
+    document.getElementById("welcomeMsg").textContent = `Welcome, ${user.first_name}!`;
+  })
+  .catch(() => {
+    console.log("User not logged in");
+    document.getElementById("loginBtn").style.display = "block"; // show login button
   });
 });
 

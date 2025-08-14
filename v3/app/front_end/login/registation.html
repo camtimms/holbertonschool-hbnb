@@ -4,23 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Guild - HBnB DnD</title>
+    <link rel="stylesheet" href="../styles/nav.css">
+    <link rel="stylesheet" href="../styles/footer.css">
     <link rel="stylesheet" href="login_styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="nav-left">
-                <img src="images/logo2.png" alt="HBnB DnD Logo" class="logo">
-            </div>
-            <div class="nav-center">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="places.html" class="nav-link">All Places</a>
-            </div>
-            <div class="nav-right">
-                <a href="login.html" class="login-button">Login</a>
-            </div>
-        </div>
-    </nav>
+    {% include '../styles/header.html' %}
 
     <main class="login-container">
         <div class="login-card">
@@ -66,9 +55,7 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2024 HBnB DnD. All rights reserved to the Guild of Adventurers.</p>
-    </footer>
+    {% include '../styles/footer.html' %}
 
     <script>
         async function handleRegister(event) {
@@ -145,7 +132,7 @@
 
                 if (response.ok) {
                     // Already logged in, redirect to home
-                    window.location.href = 'index.html';
+                    window.location.href = '../index/index.html';
                 }
             } catch (error) {
                 // Not logged in, stay on registration page

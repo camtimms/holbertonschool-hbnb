@@ -20,7 +20,7 @@ class Amenity(BaseModel):
     _name = db.Column("name", db.String(50), nullable=False)
 
     places = relationship('Place', secondary=place_amenity_asc, lazy='subquery',
-                           back_populates='amenities', lazy=True)
+                           back_populates='amenities')
 
     def __init__(self, name):
         super().__init__()

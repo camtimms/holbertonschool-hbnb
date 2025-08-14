@@ -4,29 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details - HBnB DnD</title>
+    <link rel="stylesheet" href="../styles/nav.css">
+    <link rel="stylesheet" href="../styles/footer.css">
     <link rel="stylesheet" href="place_details_styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="nav-left">
-                <img src="images/logo2.png" alt="HBnB DnD Logo" class="logo">
-            </div>
-            <div class="nav-center">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="places.html" class="nav-link">All Places</a>
-            </div>
-            <div class="nav-right">
-                <div id="authSection">
-                    <a href="login.html" class="login-button" id="loginBtn">Login</a>
-                    <div id="userInfo" style="display: none;">
-                        <span id="welcomeMsg"></span>
-                        <button onclick="logout()" class="logout-btn">Logout</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    {% include '../styles/header.html' %}
 
     <main class="place-main">
         <div class="place-container">
@@ -127,9 +110,7 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2024 HBnB DnD. All rights reserved to the Guild of Adventurers.</p>
-    </footer>
+    {% include '../styles/footer.html' %}
 
     <script src="place_details.js"></script>
 </body>

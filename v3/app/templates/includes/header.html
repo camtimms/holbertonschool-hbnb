@@ -1,0 +1,27 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="HBnB Logo">
+        </div>
+        <div class="nav-center">
+            <form class="search-form" onsubmit="handleSearch(event)">
+                <input class="search-input" type="text" placeholder="Search..." />
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
+        <div class="custom-select">
+            <select id="countrySelector">
+                <option value="">🌍 Select Country</option>
+                <option value="Skr">Skyrim</option>
+                <option value="Mw">Morrowind</option>
+                <option value="Bg">Baldurs Gate</option>
+                <option value="Mdr">Mordor</option>
+            </select>
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            <a href="{{ url_for('index') }}" class="nav-btn">Home</a>
+            <a href="{{ url_for('place_details') }}" class="nav-btn">Places</a>
+        </div>
+    </div>
+</nav>

@@ -6,6 +6,10 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    SECRET_KEY = 'hobbits-and-dragons'  # Make sure this is set
+    SESSION_COOKIE_SECURE = False  # For development
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
     # For MySQL
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',

@@ -20,7 +20,12 @@ def serialize_review(review):
         'text': review.text,
         'rating': review.rating,
         'user_id': review.user.id,
-        'place_id': review.place.id
+        'place_id': review.place.id,
+        'user': {
+            'id': review.user.id,
+            'first_name': review.user.first_name,
+            'last_name': review.user.last_name
+        }
     }
 
 def login_required(f): # login wrap

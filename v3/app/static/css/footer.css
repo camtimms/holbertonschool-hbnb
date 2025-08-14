@@ -1,6 +1,27 @@
+@font-face {
+  font-family: 'Celtic Garamond the 2nd';
+  src: url('../fonts/CELTG___.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Longa Iberica';
+  src: url('../fonts/LongaIberica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poltawski Nowy';
+  src: url('../fonts/PoltawskiNowy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .footer {
-  background-color: rgba(0, 0, 0, 0.85);
-  color: white;
+  background-color: #201D16;
+  color: #FAF6EE;
   height: 50px;
   width: 100%;
   position: fixed;
@@ -11,5 +32,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(32,29,22,0.2);
+}
+
+h1 {
+  font-family: 'Celtic Garamond the 2nd', serif;
+}
+
+h2 {
+  font-family: 'Longa Iberica', serif;
+  font-size: 2rem;
+}
+
+h3 {
+  font-family: 'Poltawski Nowy', serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+p {
+  font-family: 'Poltawski Nowy', serif;
 }

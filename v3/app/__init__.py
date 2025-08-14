@@ -44,7 +44,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     @app.route('/place')
     @app.route('/place/<place_id>')
     def place_details(place_id=None):
-        return render_template('place_details/place_details.html')
+        return render_template('place_details/place_details.html', place_id=place_id)
 
     # Create Api instance
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v3/')

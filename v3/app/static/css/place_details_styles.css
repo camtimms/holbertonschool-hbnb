@@ -1,3 +1,24 @@
+@font-face {
+    font-family: 'Celtic Garamond the 2nd';
+    src: url('../fonts/CELTG___.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Longa Iberica';
+    src: url('../fonts/LongaIberica.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poltawski Nowy';
+    src: url('../fonts/PoltawskiNowy.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -10,16 +31,36 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poltawski Nowy', serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+h1 {
+    font-family: 'Celtic Garamond the 2nd', serif;
+}
+
+h2 {
+    font-family: 'Longa Iberica', serif;
+    font-size: 2rem;
+}
+
+h3 {
+    font-family: 'Poltawski Nowy', serif;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+p {
+    font-family: 'Poltawski Nowy', serif;
+}
+
 /* Navbar styles - consistent with other pages */
 .navbar {
-    background-color: rgba(0, 0, 0, 0.85);
-    color: white;
+    background-color: #201D16;
+    color: #FAF6EE;
     height: 90px;
     width: 100%;
     position: fixed;
@@ -54,7 +95,7 @@ body {
 }
 
 .nav-link {
-    color: white;
+    color: #FAF6EE;
     text-decoration: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -69,7 +110,7 @@ body {
 .login-button, .logout-btn {
     padding: 12px 24px;
     background-color: #ffffff22;
-    color: white;
+    color: #FAF6EE;
     text-decoration: none;
     border: none;
     border-radius: 4px;
@@ -89,7 +130,7 @@ body {
 }
 
 #welcomeMsg {
-    color: #DAA520;
+    color: #FEC882;
     font-weight: bold;
 }
 
@@ -103,18 +144,26 @@ body {
 }
 
 .place-container {
-    background-color: rgba(13, 7, 7, 0.95);
-    border: 2px solid #8B4513;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background-image: url('../images/Long scroll.png');
+    background-size: 105% 105%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 130px 160px 100px 160px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    min-height: 105vh;
+    position: relative;
+    width: 98%;
+    margin: 0 auto;
 }
 
 /* Loading and error states */
 .loading, .error {
     text-align: center;
     padding: 60px 20px;
-    color: white;
+    color: #FAF6EE;
     font-size: 1.2rem;
 }
 
@@ -126,8 +175,8 @@ body {
 .retry-btn {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #DAA520;
-    color: white;
+    background-color: #CE8B44;
+    color: #FAF6EE;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -148,24 +197,31 @@ body {
 
 .back-btn {
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: rgba(139, 69, 19, 0.1);
+    color: #8B4513;
     border: 2px solid #8B4513;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
     font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .back-btn:hover {
-    background-color: #8B4513;
+    background-color: rgba(139, 69, 19, 0.2);
+    border-color: #654321;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
 }
 
 .place-title {
     font-size: 2.5rem;
-    color: #DAA520;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #8B4513;
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.3);
     flex: 1;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .place-info {
@@ -194,21 +250,25 @@ body {
 }
 
 .place-details-content {
-    color: white;
+    color: #654321;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
 .host-info h3 {
-    color: #DAA520;
-    font-size: 1.2rem;
+    color: #8B4513;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
     margin-bottom: 5px;
+    font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .price-info {
-    background-color: rgba(218, 165, 32, 0.1);
-    border: 2px solid #DAA520;
+    background-color: rgba(139, 69, 19, 0.1);
+    border: 2px solid #8B4513;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -217,27 +277,32 @@ body {
 .price {
     font-size: 2rem;
     font-weight: bold;
-    color: #DAA520;
+    color: #8B4513;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .period {
-    color: #E6E6FA;
+    color: #654321;
     font-size: 1.1rem;
 }
 
 .description-section h3,
 .amenities-section h3,
 .location-section h3 {
-    color: #DAA520;
-    font-size: 1.3rem;
+    color: #8B4513;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #8B4513;
+    border-bottom: 2px solid #8B4513;
     padding-bottom: 5px;
+    font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .description-section p {
     line-height: 1.6;
-    color: #E6E6FA;
+    color: #654321;
 }
 
 .amenities-list {
@@ -247,8 +312,8 @@ body {
 }
 
 .amenity-tag {
-    background-color: rgba(139, 69, 19, 0.3);
-    color: #DAA520;
+    background-color: rgba(139, 69, 19, 0.2);
+    color: #8B4513;
     padding: 8px 15px;
     border: 1px solid #8B4513;
     border-radius: 20px;
@@ -257,12 +322,12 @@ body {
 }
 
 .location-section p {
-    color: #E6E6FA;
+    color: #654321;
 }
 
 /* Reviews Section */
 .reviews-section {
-    border-top: 2px solid #8B4513;
+    border-top: 2px solid #5B692C;
     padding-top: 30px;
 }
 
@@ -274,21 +339,23 @@ body {
 }
 
 .reviews-header h2 {
-    color: #DAA520;
-    font-size: 2rem;
+    color: #8B4513;
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.2);
 }
 
 .reviews-count {
-    color: #E6E6FA;
+    color: #8B4513;
     font-size: 1.1rem;
-    background-color: rgba(218, 165, 32, 0.1);
+    background-color: rgba(139, 69, 19, 0.1);
     padding: 8px 15px;
     border-radius: 20px;
+    border: 1px solid #8B4513;
 }
 
 /* Add Review Form */
 .add-review {
-    background-color: rgba(139, 69, 19, 0.2);
+    background-color: rgba(139, 69, 19, 0.1);
     border: 2px solid #8B4513;
     border-radius: 15px;
     padding: 25px;
@@ -296,9 +363,13 @@ body {
 }
 
 .add-review h3 {
-    color: #DAA520;
-    font-size: 1.4rem;
+    color: #8B4513;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
     margin-bottom: 20px;
+    font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .form {
@@ -314,7 +385,7 @@ body {
 }
 
 .form-group label {
-    color: #DAA520;
+    color: #8B4513;
     font-weight: bold;
     font-size: 1rem;
 }
@@ -324,8 +395,8 @@ body {
     padding: 12px 15px;
     border: 2px solid #8B4513;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: rgba(245, 245, 220, 0.3);
+    color: #654321;
     font-size: 16px;
     font-family: inherit;
     transition: border-color 0.3s;
@@ -334,7 +405,8 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #DAA520;
+    border-color: #8B4513;
+    background-color: rgba(245, 245, 220, 0.5);
 }
 
 .form-group textarea {
@@ -343,14 +415,14 @@ body {
 }
 
 .form-group select option {
-    background-color: rgba(20, 20, 20, 0.95);
-    color: white;
+    background-color: rgba(245, 245, 220, 0.95);
+    color: #654321;
 }
 
 .submit-review-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg, #8B4513, #DAA520);
-    color: white;
+    background: linear-gradient(135deg, #8B4513, #D2691E);
+    color: #F5F5DC;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -358,11 +430,13 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     align-self: flex-start;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .submit-review-btn:hover {
-    background: linear-gradient(135deg, #A0522D, #FFD700);
+    background: linear-gradient(135deg, #A0522D, #CD853F);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
 .review-message {
@@ -375,19 +449,19 @@ body {
 
 .review-message.success {
     background-color: rgba(40, 167, 69, 0.8);
-    color: white;
+    color: #FAF6EE;
     border: 1px solid #28a745;
 }
 
 .review-message.error {
     background-color: rgba(220, 53, 69, 0.8);
-    color: white;
+    color: #FAF6EE;
     border: 1px solid #dc3545;
 }
 
 .review-notice {
     background-color: rgba(255, 193, 7, 0.1);
-    color: #FFD700;
+    color: #FEC882;
     padding: 15px;
     border: 1px solid #ffc107;
     border-radius: 8px;
@@ -403,7 +477,7 @@ body {
 }
 
 .review-card {
-    background-color: rgba(139, 69, 19, 0.2);
+    background-color: rgba(245, 245, 220, 0.3);
     border: 1px solid #8B4513;
     border-radius: 12px;
     padding: 20px;
@@ -423,18 +497,18 @@ body {
 }
 
 .reviewer-info strong {
-    color: #DAA520;
+    color: #8B4513;
     font-size: 1.1rem;
 }
 
 .review-rating {
-    color: #FFD700;
+    color: #D2691E;
     font-size: 1.2rem;
     margin-top: 5px;
 }
 
 .review-text {
-    color: #E6E6FA;
+    color: #654321;
     line-height: 1.5;
     font-size: 1rem;
 }
@@ -442,17 +516,17 @@ body {
 .no-reviews {
     text-align: center;
     padding: 40px;
-    color: #E6E6FA;
+    color: #654321;
     font-size: 1.1rem;
-    background-color: rgba(139, 69, 19, 0.1);
+    background-color: rgba(245, 245, 220, 0.2);
     border: 1px solid #8B4513;
     border-radius: 10px;
 }
 
 /* Footer */
 .footer {
-    background-color: rgba(0, 0, 0, 0.85);
-    color: white;
+    background-color: #201D16;
+    color: #FAF6EE;
     height: 50px;
     width: 100%;
     display: flex;

@@ -18,7 +18,7 @@ body {
 
 /* Navbar styles - consistent with index */
 .navbar {
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: #201D16;
     color: white;
     height: 90px;
     width: 100%;
@@ -91,8 +91,8 @@ body {
 }
 
 .login-card {
-    background-color: rgba(13, 7, 7, 0.9);
-    border: 2px solid #8B4513;
+    background-color: #4E3E2E;
+    border: 2px solid #5B692C;
     border-radius: 15px;
     padding: 40px;
     max-width: 450px;
@@ -106,7 +106,7 @@ body {
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 10px;
-    color: #DAA520;
+    color: #FEC882;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     font-weight: bold;
 }
@@ -114,7 +114,7 @@ body {
 .login-subtitle {
     text-align: center;
     margin-bottom: 30px;
-    color: #E6E6FA;
+    color: #FAF6EE;
     font-size: 1.1rem;
 }
 
@@ -131,14 +131,14 @@ body {
 
 .form-group label {
     margin-bottom: 5px;
-    color: #DAA520;
+    color: #FEC882;
     font-weight: bold;
     font-size: 1.1rem;
 }
 
 .form-group input {
     padding: 12px 15px;
-    border: 2px solid #8B4513;
+    border: 2px solid #5B692C;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
@@ -148,7 +148,7 @@ body {
 
 .form-group input:focus {
     outline: none;
-    border-color: #DAA520;
+    border-color: #FEC882;
     background-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -158,7 +158,7 @@ body {
 
 .login-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg, #8B4513, #DAA520);
+    background: linear-gradient(135deg, #5B692C, #CE8B44);
     color: white;
     border: none;
     border-radius: 8px;
@@ -170,7 +170,7 @@ body {
 }
 
 .login-btn:hover {
-    background: linear-gradient(135deg, #A0522D, #FFD700);
+    background: linear-gradient(135deg, #5B692C, #FEC882);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
 }
@@ -189,28 +189,28 @@ body {
     text-align: center;
     margin-top: 25px;
     padding-top: 20px;
-    border-top: 1px solid #8B4513;
+    border-top: 1px solid #5B692C;
 }
 
 .signup-link p {
-    color: #E6E6FA;
+    color: #FAF6EE;
 }
 
 .signup-link a {
-    color: #DAA520;
+    color: #FEC882;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
 }
 
 .signup-link a:hover {
-    color: #FFD700;
+    color: #FEC882;
 }
 
 /* Footer */
 .footer {
-    background-color: rgba(0, 0, 0, 0.85);
-    color: white;
+    background-color: #201D16;
+    color: #FAF6EE;
     height: 50px;
     width: 100%;
     display: flex;

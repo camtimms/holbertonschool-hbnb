@@ -3,10 +3,21 @@ let currentPlace = null;
 let placeId = null;
 let userHasReviewed = false;
 
-// Get place ID from URL parameters
+// Get place ID from URL parameters or URL path
 function getPlaceId() {
+    // First try URL parameters (?id=)
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
+    let id = urlParams.get('id');
+    
+    // If not found, try to extract from URL path (/place/123)
+    if (!id) {
+        const pathParts = window.location.pathname.split('/');
+        if (pathParts.length >= 3 && pathParts[1] === 'place') {
+            id = pathParts[2];
+        }
+    }
+    
+    return id;
 }
 
 // Check authentication status
@@ -52,30 +63,85 @@ async function logout() {
 // Load place details
 async function loadPlaceDetails() {
     try {
+        console.log('Fetching place details from:', `/api/v3/places/${placeId}`);
         const response = await fetch(`/api/v3/places/${placeId}`, {
             credentials: 'include'
         });
 
         if (response.ok) {
             currentPlace = await response.json();
+            console.log('Place details loaded:', currentPlace);
             displayPlaceDetails(currentPlace);
         } else {
-            // Sample data for development
-            currentPlace = {
-                id: placeId,
-                title: 'Dragon\'s Rest Tavern',
-                description: 'A legendary tavern where heroes gather to share tales of their adventures. Features comfortable rooms, hearty meals, and the finest ale in the kingdom. The tavern is renowned for its magical warmth that keeps adventurers cozy even in the coldest nights.',
-                price: 75,
-                latitude: 42.3601,
-                longitude: -71.0589,
-                owner_id: 'sample-owner-id',
-                amenities: ['Wi-Fi', 'Hot Meals', 'Stables', 'Magical Protection']
+            console.log('API response not ok, status:', response.status);
+            console.log('Using sample data for development');
+            
+            // Sample data that matches the places from scripts.js
+            const samplePlaces = {
+                '1': {
+                    id: '1',
+                    title: 'Dragon\'s Rest Tavern',
+                    description: 'A legendary tavern where heroes gather to share tales of their adventures. Features comfortable rooms, hearty meals, and the finest ale in the kingdom. The tavern is renowned for its magical warmth that keeps adventurers cozy even in the coldest nights. Cool spot #1',
+                    price: 75,
+                    latitude: 42.3601,
+                    longitude: -71.0589,
+                    owner_id: 'guild-master-1',
+                    amenities: ['Hot Meals', 'Finest Ale', 'Magical Warmth', 'Storytelling Corner']
+                },
+                '2': {
+                    id: '2',
+                    title: 'Cozy Woodland Cabin',
+                    description: 'A charming cabin nestled deep in the enchanted forest. Perfect for those seeking peace and tranquility away from the bustling kingdom. Features rustic furniture, a stone fireplace, and windows overlooking the mystical woods. Awesome place #2',
+                    price: 100,
+                    latitude: 45.5152,
+                    longitude: -122.6784,
+                    owner_id: 'forest-keeper-2',
+                    amenities: ['Stone Fireplace', 'Forest Views', 'Rustic Charm', 'Wildlife Watching']
+                },
+                '3': {
+                    id: '3',
+                    title: 'Ethereal Fae Retreat',
+                    description: 'A magical sanctuary where the veil between worlds is thin. This otherworldly retreat offers guests a chance to experience the mystical realm of the fae. Surrounded by glowing flowers and singing crystals. Nice view #3',
+                    price: 200,
+                    latitude: 51.5074,
+                    longitude: -0.1278,
+                    owner_id: 'fae-queen-3',
+                    amenities: ['Magical Gardens', 'Crystal Formations', 'Otherworldly Experience', 'Glowing Flora']
+                },
+                '4': {
+                    id: '4',
+                    title: 'Royal Castle Quarters',
+                    description: 'Luxurious accommodations within the walls of an ancient castle. Experience royal treatment with tapestries, four-poster beds, and views of the kingdom. Perfect for those who desire the finest in medieval luxury. Hidden gem #4',
+                    price: 300,
+                    latitude: 48.8566,
+                    longitude: 2.3522,
+                    owner_id: 'castle-steward-4',
+                    amenities: ['Royal Treatment', 'Four-Poster Beds', 'Castle Views', 'Medieval Luxury', 'Tapestries']
+                }
             };
+            
+            // Use sample data based on place ID, default to first place if ID not found
+            currentPlace = samplePlaces[placeId] || samplePlaces['1'];
             displayPlaceDetails(currentPlace);
         }
     } catch (error) {
         console.error('Error loading place:', error);
-        showError();
+        console.log('Falling back to sample data due to network error');
+        // Even if there's a network error, show sample data instead of error page
+        const samplePlaces = {
+            '1': {
+                id: '1',
+                title: 'Dragon\'s Rest Tavern',
+                description: 'A legendary tavern where heroes gather to share tales of their adventures. Features comfortable rooms, hearty meals, and the finest ale in the kingdom. Cool spot #1',
+                price: 75,
+                latitude: 42.3601,
+                longitude: -71.0589,
+                owner_id: 'guild-master-1',
+                amenities: ['Hot Meals', 'Finest Ale', 'Magical Warmth', 'Storytelling Corner']
+            }
+        };
+        currentPlace = samplePlaces[placeId] || samplePlaces['1'];
+        displayPlaceDetails(currentPlace);
     }
 }
 
@@ -85,11 +151,27 @@ function displayPlaceDetails(place) {
     document.getElementById('placeDescription').textContent = place.description;
     document.getElementById('placePrice').textContent = `${place.price} gold`;
     document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
-    document.getElementById('hostName').textContent = 'Guild Master'; // Will be replaced with actual owner name
+    // Set host name based on place ID
+    const hostMapping = {
+        '1': 'Guild Master Thorin',      // Dragon's Rest Tavern
+        '2': 'Forest Keeper Elaria',    // Cozy Woodland Cabin
+        '3': 'Fae Queen Titania',       // Ethereal Fae Retreat
+        '4': 'Castle Steward Magnus'    // Royal Castle Quarters
+    };
+    
+    const hostName = hostMapping[place.id] || 'Guild Master';
+    document.getElementById('hostName').textContent = hostName;
 
-    // Set random image
-    const imageNum = Math.floor(Math.random() * 4) + 1;
-    document.getElementById('placeImage').src = `/static/images/place${imageNum}.jpeg`;
+    // Set image based on place ID to match scripts.js
+    const imageMapping = {
+        '1': 'place1.jpeg', // Dragon's Rest Tavern
+        '2': 'place2.jpeg', // Cozy Woodland Cabin  
+        '3': 'place3.jpeg', // Ethereal Fae Retreat
+        '4': 'place4.jpeg'  // Royal Castle Quarters
+    };
+    
+    const imageName = imageMapping[place.id] || 'place1.jpeg';
+    document.getElementById('placeImage').src = `/static/images/${imageName}`;
     document.getElementById('placeImage').alt = place.title;
 
     // Display amenities if they exist
@@ -112,34 +194,98 @@ function displayPlaceDetails(place) {
 // Load reviews for the place
 async function loadReviews() {
     try {
+        console.log('Fetching reviews from:', `/api/v3/reviews/places/${placeId}/reviews`);
         const response = await fetch(`/api/v3/reviews/places/${placeId}/reviews`, {
             credentials: 'include'
         });
 
         if (response.ok) {
             const reviews = await response.json();
+            console.log('Reviews loaded:', reviews);
             displayReviews(reviews);
         } else {
-            // Sample reviews for development
-            const sampleReviews = [
-                {
-                    id: '1',
-                    text: 'Amazing place! The atmosphere was perfect for our adventuring party. The beds were comfortable and the food was outstanding.',
-                    rating: 5,
-                    user: { first_name: 'Aragorn', last_name: 'Ranger' }
-                },
-                {
-                    id: '2',
-                    text: 'Good location and decent amenities. The magical protection made us feel safe during our stay.',
-                    rating: 4,
-                    user: { first_name: 'Gandalf', last_name: 'Grey' }
-                }
-            ];
+            console.log('Reviews API response not ok, status:', response.status);
+            console.log('Using sample reviews for development');
+            
+            // Sample reviews that match each place
+            const sampleReviewsByPlace = {
+                '1': [ // Dragon's Rest Tavern
+                    {
+                        id: '1',
+                        text: 'Amazing place! The atmosphere was perfect for our adventuring party. The ale was indeed the finest in the kingdom and the storytelling corner made for great entertainment.',
+                        rating: 5,
+                        user: { first_name: 'Aragorn', last_name: 'Ranger' }
+                    },
+                    {
+                        id: '2',
+                        text: 'The magical warmth was incredible - kept us cozy all night. Great hot meals and the staff really knows how to treat adventurers.',
+                        rating: 4,
+                        user: { first_name: 'Legolas', last_name: 'Greenleaf' }
+                    }
+                ],
+                '2': [ // Cozy Woodland Cabin
+                    {
+                        id: '3',
+                        text: 'Perfect retreat from city life! The stone fireplace was so cozy and we saw amazing wildlife right from our windows.',
+                        rating: 5,
+                        user: { first_name: 'Hermione', last_name: 'Granger' }
+                    },
+                    {
+                        id: '4',
+                        text: 'Rustic charm at its finest. The forest views were breathtaking and so peaceful. Highly recommend for nature lovers.',
+                        rating: 4,
+                        user: { first_name: 'Druid', last_name: 'Wildwood' }
+                    }
+                ],
+                '3': [ // Ethereal Fae Retreat
+                    {
+                        id: '5',
+                        text: 'Truly otherworldly experience! The glowing flowers were magical and the crystal formations sang beautiful melodies.',
+                        rating: 5,
+                        user: { first_name: 'Luna', last_name: 'Lovegood' }
+                    },
+                    {
+                        id: '6',
+                        text: 'The magical gardens exceeded all expectations. Felt like stepping into another realm entirely. Absolutely enchanting!',
+                        rating: 5,
+                        user: { first_name: 'Gandalf', last_name: 'Grey' }
+                    }
+                ],
+                '4': [ // Royal Castle Quarters
+                    {
+                        id: '7',
+                        text: 'Royal treatment indeed! The four-poster bed was incredibly comfortable and the castle views were spectacular.',
+                        rating: 5,
+                        user: { first_name: 'Princess', last_name: 'Zelda' }
+                    },
+                    {
+                        id: '8',
+                        text: 'Medieval luxury at its peak. The tapestries were beautiful and we felt like true royalty during our stay.',
+                        rating: 4,
+                        user: { first_name: 'Sir', last_name: 'Galahad' }
+                    }
+                ]
+            };
+            
+            const sampleReviews = sampleReviewsByPlace[placeId] || sampleReviewsByPlace['1'];
             displayReviews(sampleReviews);
         }
     } catch (error) {
         console.error('Error loading reviews:', error);
-        document.getElementById('reviewsList').innerHTML = '<div class="error">Failed to load reviews.</div>';
+        console.log('Network error loading reviews, showing sample data');
+        // Show sample reviews even on network error
+        const sampleReviewsByPlace = {
+            '1': [
+                {
+                    id: '1',
+                    text: 'Amazing tavern with great atmosphere! (Sample review - network error)',
+                    rating: 5,
+                    user: { first_name: 'Test', last_name: 'User' }
+                }
+            ]
+        };
+        const sampleReviews = sampleReviewsByPlace[placeId] || sampleReviewsByPlace['1'];
+        displayReviews(sampleReviews);
     }
 }
 
@@ -263,11 +409,15 @@ document.addEventListener('DOMContentLoaded', () => {
     placeId = getPlaceId();
 
     if (!placeId) {
+        console.error('No place ID found in URL');
         showError();
         return;
     }
 
-    checkAuth();
-    loadPlaceDetails();
-    loadReviews();
+    console.log('Loading place details for ID:', placeId);
+    
+    // Load components with error handling
+    checkAuth().catch(err => console.log('Auth check failed:', err));
+    loadPlaceDetails().catch(err => console.error('Failed to load place details:', err));
+    loadReviews().catch(err => console.error('Failed to load reviews:', err));
 });

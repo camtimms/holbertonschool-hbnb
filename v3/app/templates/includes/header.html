@@ -19,9 +19,14 @@
             </select>
         </div>
         <div class="nav-right">
-            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            <div id="loginBtn">
+                <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            </div>
+            <div id="userInfo" style="display: none;">
+                <span id="welcomeMsg">Welcome!</span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
             <a href="{{ url_for('index') }}" class="nav-btn">Home</a>
-            <a href="{{ url_for('place_details') }}" class="nav-btn">Places</a>
         </div>
     </div>
 </nav>

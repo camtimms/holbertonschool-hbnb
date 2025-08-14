@@ -12,7 +12,7 @@ function getPlaceId() {
 // Check authentication status
 async function checkAuth() {
     try {
-        const response = await fetch('/api/v1/auth/protected', {
+        const response = await fetch('/api/v3/auth/protected', {
             credentials: 'include'
         });
 
@@ -35,7 +35,7 @@ async function checkAuth() {
 // Logout function
 async function logout() {
     try {
-        await fetch('/api/v1/auth/logout', {
+        await fetch('/api/v3/auth/logout', {
             method: 'POST',
             credentials: 'include'
         });
@@ -52,7 +52,7 @@ async function logout() {
 // Load place details
 async function loadPlaceDetails() {
     try {
-        const response = await fetch(`/api/v1/places/${placeId}`, {
+        const response = await fetch(`/api/v3/places/${placeId}`, {
             credentials: 'include'
         });
 
@@ -89,7 +89,7 @@ function displayPlaceDetails(place) {
 
     // Set random image
     const imageNum = Math.floor(Math.random() * 4) + 1;
-    document.getElementById('placeImage').src = `images/place${imageNum}.jpeg`;
+    document.getElementById('placeImage').src = `/static/images/place${imageNum}.jpeg`;
     document.getElementById('placeImage').alt = place.title;
 
     // Display amenities if they exist
@@ -112,7 +112,7 @@ function displayPlaceDetails(place) {
 // Load reviews for the place
 async function loadReviews() {
     try {
-        const response = await fetch(`/api/v1/reviews/places/${placeId}/reviews`, {
+        const response = await fetch(`/api/v3/reviews/places/${placeId}/reviews`, {
             credentials: 'include'
         });
 
@@ -204,7 +204,7 @@ async function submitReview(event) {
     const text = document.getElementById('reviewText').value;
 
     try {
-        const response = await fetch('/api/v1/reviews/', {
+        const response = await fetch('/api/v3/reviews/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

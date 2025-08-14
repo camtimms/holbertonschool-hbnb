@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details - HBnB DnD</title>
-    <link rel="stylesheet" href="../styles/nav.css">
-    <link rel="stylesheet" href="../styles/footer.css">
-    <link rel="stylesheet" href="place_details_styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/place_details_styles.css') }}">
 </head>
 <body>
-    {% include '../styles/header.html' %}
+    {% include 'includes/header.html' %}
 
     <main class="place-main">
         <div class="place-container">
@@ -110,8 +110,8 @@
         </div>
     </main>
 
-    {% include '../styles/footer.html' %}
+    {% include 'includes/footer.html' %}
 
-    <script src="place_details.js"></script>
+    <script src="{{ url_for('static', filename='js/place_details.js') }}"></script>
 </body>
 </html>

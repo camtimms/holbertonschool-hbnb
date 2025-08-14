@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Guild - HBnB DnD</title>
-    <link rel="stylesheet" href="../styles/nav.css">
-    <link rel="stylesheet" href="../styles/footer.css">
-    <link rel="stylesheet" href="login_styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_styles.css') }}">
 </head>
 <body>
-    {% include '../styles/header.html' %}
+    {% include 'includes/header.html' %}
 
     <main class="login-container">
         <div class="login-card">
@@ -50,12 +50,12 @@
             </form>
 
             <div class="signup-link">
-                <p>Already have an account? <a href="login.html">Sign in here</a></p>
+                <p>Already have an account? <a href="{{ url_for('login') }}">Sign in here</a></p>
             </div>
         </div>
     </main>
 
-    {% include '../styles/footer.html' %}
+    {% include 'includes/footer.html' %}
 
     <script>
         async function handleRegister(event) {
@@ -110,7 +110,7 @@
 
                     // Redirect to login page after 2 seconds
                     setTimeout(() => {
-                        window.location.href = 'login.html';
+                        window.location.href = '{{ url_for('login') }}';
                     }, 2000);
                 } else {
                     // Show error message
@@ -132,7 +132,7 @@
 
                 if (response.ok) {
                     // Already logged in, redirect to home
-                    window.location.href = '../index/index.html';
+                    window.location.href = '{{ url_for('index') }}';
                 }
             } catch (error) {
                 // Not logged in, stay on registration page

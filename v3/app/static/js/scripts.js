@@ -12,10 +12,10 @@ function scrollRight() {
 }
 
 const places = [
-    { name: "Tavern", description: "Cool spot #1", price: 75, rating: 4.5, image: "images/place1.jpeg"},
-    { name: "Cozy cabin", description: "Awesome place #2", price: 100, rating: 4.3, image: "images/place2.jpeg"},
-    { name: "Fae retreat", description: "Nice view #3", price: 200, rating: 4.5, image: "images/place3.jpeg"},
-    { name: "Castle quarters", description: "Hidden gem #4", price: 300, rating: 4.5, image: "images/place4.jpeg"},
+    { name: "Tavern", description: "Cool spot #1", price: 75, rating: 4.5, image: "/static/images/place1.jpeg"},
+    { name: "Cozy cabin", description: "Awesome place #2", price: 100, rating: 4.3, image: "/static/images/place2.jpeg"},
+    { name: "Fae retreat", description: "Nice view #3", price: 200, rating: 4.5, image: "/static/images/place3.jpeg"},
+    { name: "Castle quarters", description: "Hidden gem #4", price: 300, rating: 4.5, image: "/static/images/place4.jpeg"},
 ];
 
 const cardRow = document.getElementById('cardRow');
@@ -80,7 +80,7 @@ document.getElementById('filter').addEventListener('change', function() {
 });
 
 // login required
-fetch('/auth/protected', {
+fetch('/api/v3/auth/protected', {
     method: 'GET',
     credentials: 'include' // send session cookie
 })
@@ -100,7 +100,7 @@ fetch('/auth/protected', {
 })
 .catch(err => console.error('Error checking login:', err));
 // post request for login
-fetch('/auth/login', {
+fetch('/api/v3/auth/login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ fetch('/auth/login', {
 });
 // remove login button if logged in
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/auth/protected", {
+  fetch("/api/v3/auth/protected", {
     method: "GET",
     credentials: "include" // for session cookies
   })

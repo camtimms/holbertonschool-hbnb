@@ -5,7 +5,7 @@
 }
 
 body {
-  background-image: url('images/questing_book.jpeg');
+  background-image: url('../images/questing_book.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

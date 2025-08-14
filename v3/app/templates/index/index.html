@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HBnB DND</title>
-  <link rel="stylesheet" href="../styles/nav.css" />
-  <link rel="stylesheet" href="../styles/footer.css" />
-  <link rel="stylesheet" href="index_styles.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index_styles.css') }}" />
 </head>
 <body>
 
-  {% include '../styles/header.html' %}
-  
+  {% include 'includes/header.html' %}
+
   <main>
   <section class="places-container">
     <div class="filter-container">
@@ -35,9 +35,9 @@
     </div>
   </section>
   </main>
-  
-  {% include '../styles/footer.html' %}
-  
-<script src="scripts.js"></script>
+
+  {% include 'includes/footer.html' %}
+
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>

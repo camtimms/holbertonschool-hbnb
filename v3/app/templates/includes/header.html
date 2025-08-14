@@ -1,7 +1,7 @@
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <img src="images/logo2.png" alt="HBnB Logo">
+            <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="HBnB Logo">
         </div>
         <div class="nav-center">
             <form class="search-form" onsubmit="handleSearch(event)">
@@ -19,9 +19,9 @@
             </select>
         </div>
         <div class="nav-right">
-            <a href="../login/login.html" class="login-btn">Login</a>
-            <a href="../index/index.html" class="nav-btn">Home</a>
-            <a href="../place_details/place_details.html" class="nav-btn">Places</a>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            <a href="{{ url_for('index') }}" class="nav-btn">Home</a>
+            <a href="{{ url_for('place_details') }}" class="nav-btn">Places</a>
         </div>
     </div>
 </nav>

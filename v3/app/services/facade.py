@@ -4,18 +4,18 @@ from app.models.users import User
 from app.models.reviews import Review
 from app.models.amenity import Amenity
 from app.persistence.repository import UserRepository
+from app import db
 
 class HBnBFacade:
     def __init__(self):
         self.user_repo = UserRepository()
-        self.place_repo = SQLAlchemyRepository(User)
-        self.review_repo = SQLAlchemyRepository(User)
-        self.amenity_repo = SQLAlchemyRepository(User)
+        self.place_repo = SQLAlchemyRepository(Place)
+        self.review_repo = SQLAlchemyRepository(Review)
+        self.amenity_repo = SQLAlchemyRepository(Amenity)
 
     # --- CRU User ---
     def create_user(self, user_data):
         user = User(**user_data)
-        user.hash_password(user_data['password'])   # to be implemented
         self.user_repo.add(user)
         return user
 
@@ -23,7 +23,64 @@ class HBnBFacade:
         return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-        return self.user_repo.get_by_attribute('email', email)
+        return self.user_repo.get_user_by_email(email)
+
+    def update_user(self, user_id, user_data):
+        """Update user information"""
+        user = self.user_repo.get(user_id)
+        if not user:
+            return None
+
+        # Handle password hashing if password is being updated
+        if 'password' in user_data:
+            user.hash_password(user_data['password'])
+            # Remove password from user_data to avoid setting it directly
+            user_data_copy = user_data.copy()
+            user_data_copy.pop('password')
+            user_data = user_data_copy
+
+        # Update other fields
+        for key, value in user_data.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+
+        # Save changes to database
+        from app import db
+        db.session.commit()
+
+        return user
+
+    def delete_user(self, user_id):
+        """Delete a user and handle cascading deletions"""
+        user = self.user_repo.get(user_id)
+        if not user:
+            return False
+
+        try:
+            # Handle cascade deletions manually if needed
+            # Delete user's reviews first
+            user_reviews = [review for review in self.review_repo.get_all() if review.user.id == user_id]
+            for review in user_reviews:
+                db.session.delete(review)
+
+            # Delete user's places (this will also handle place-related reviews)
+            user_places = [place for place in self.place_repo.get_all() if place.owner.id == user_id]
+            for place in user_places:
+                # Delete reviews for this place
+                place_reviews = [review for review in self.review_repo.get_all() if review.place.id == place.id]
+                for review in place_reviews:
+                    db.session.delete(review)
+                # Delete the place
+                db.session.delete(place)
+
+            # Finally delete the user
+            db.session.delete(user)
+            db.session.commit()
+
+            return True
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Error deleting user: {str(e)}")
 
     # --- CRU Place ---
     def create_place(self, place_data):
@@ -81,11 +138,36 @@ class HBnBFacade:
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        # Check if place_id already exists
-        check_id = self.place_repo.get(place_id)
-        if check_id is None:
-            raise ValueError (f"Place with ID {place_id} not found")
-        self.place_repo.update(place_id, place_data)
+        """Update place information, handling relationships properly"""
+        # Check if place exists
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError(f"Place with ID {place_id} not found")
+
+        # Handle amenities separately if they're in the update data
+        if 'amenities' in place_data:
+            amenity_ids = place_data.pop('amenities')  # Remove from place_data
+
+            # Convert amenity IDs to actual amenity objects
+            amenities = []
+            for amenity_id in amenity_ids:
+                amenity = self.amenity_repo.get(amenity_id)
+                if not amenity:
+                    raise ValueError(f"Amenity with ID {amenity_id} not found")
+                amenities.append(amenity)
+
+            # Update the amenities relationship
+            place.amenities = amenities
+
+        # Update other fields using the repository
+        if place_data:  # Only call update if there are other fields to update
+            self.place_repo.update(place_id, place_data)
+
+        # If we only updated amenities, we still need to commit the changes
+        if 'amenities' in locals():
+            from app import db
+            db.session.commit()
+
         return self.place_repo.get(place_id)
 
 

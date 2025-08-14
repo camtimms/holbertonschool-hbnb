@@ -144,11 +144,19 @@ p {
 }
 
 .place-container {
-    background-color: #4E3E2E;
-    border: 2px solid #5B692C;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background-image: url('../images/Long scroll.png');
+    background-size: 105% 105%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 130px 160px 100px 160px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    min-height: 105vh;
+    position: relative;
+    width: 98%;
+    margin: 0 auto;
 }
 
 /* Loading and error states */
@@ -189,24 +197,31 @@ p {
 
 .back-btn {
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #FAF6EE;
-    border: 2px solid #5B692C;
+    background-color: rgba(139, 69, 19, 0.1);
+    color: #8B4513;
+    border: 2px solid #8B4513;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
     font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .back-btn:hover {
-    background-color: #8B4513;
+    background-color: rgba(139, 69, 19, 0.2);
+    border-color: #654321;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
 }
 
 .place-title {
     font-size: 2.5rem;
-    color: #FEC882;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #8B4513;
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.3);
     flex: 1;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .place-info {
@@ -235,24 +250,25 @@ p {
 }
 
 .place-details-content {
-    color: #FAF6EE;
+    color: #654321;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
 .host-info h3 {
-    color: #FEC882;
+    color: #8B4513;
     font-size: 2.2rem;
     font-weight: bold;
     letter-spacing: 0.5px;
     margin-bottom: 5px;
     font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .price-info {
-    background-color: rgba(254, 200, 130, 0.1);
-    border: 2px solid #FEC882;
+    background-color: rgba(139, 69, 19, 0.1);
+    border: 2px solid #8B4513;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -261,30 +277,32 @@ p {
 .price {
     font-size: 2rem;
     font-weight: bold;
-    color: #FEC882;
+    color: #8B4513;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .period {
-    color: #FAF6EE;
+    color: #654321;
     font-size: 1.1rem;
 }
 
 .description-section h3,
 .amenities-section h3,
 .location-section h3 {
-    color: #FEC882;
+    color: #8B4513;
     font-size: 2.2rem;
     font-weight: bold;
     letter-spacing: 0.5px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #5B692C;
+    border-bottom: 2px solid #8B4513;
     padding-bottom: 5px;
     font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .description-section p {
     line-height: 1.6;
-    color: #FAF6EE;
+    color: #654321;
 }
 
 .amenities-list {
@@ -294,17 +312,17 @@ p {
 }
 
 .amenity-tag {
-    background-color: rgba(91, 105, 44, 0.3);
-    color: #FEC882;
+    background-color: rgba(139, 69, 19, 0.2);
+    color: #8B4513;
     padding: 8px 15px;
-    border: 1px solid #5B692C;
+    border: 1px solid #8B4513;
     border-radius: 20px;
     font-size: 14px;
     font-weight: bold;
 }
 
 .location-section p {
-    color: #FAF6EE;
+    color: #654321;
 }
 
 /* Reviews Section */
@@ -321,34 +339,37 @@ p {
 }
 
 .reviews-header h2 {
-    color: #FEC882;
+    color: #8B4513;
     font-size: 2.5rem;
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.2);
 }
 
 .reviews-count {
-    color: #FAF6EE;
+    color: #8B4513;
     font-size: 1.1rem;
-    background-color: rgba(254, 200, 130, 0.1);
+    background-color: rgba(139, 69, 19, 0.1);
     padding: 8px 15px;
     border-radius: 20px;
+    border: 1px solid #8B4513;
 }
 
 /* Add Review Form */
 .add-review {
-    background-color: rgba(91, 105, 44, 0.2);
-    border: 2px solid #5B692C;
+    background-color: rgba(139, 69, 19, 0.1);
+    border: 2px solid #8B4513;
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 30px;
 }
 
 .add-review h3 {
-    color: #FEC882;
+    color: #8B4513;
     font-size: 2.2rem;
     font-weight: bold;
     letter-spacing: 0.5px;
     margin-bottom: 20px;
     font-family: 'Poltawski Nowy', serif;
+    text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2);
 }
 
 .form {
@@ -364,7 +385,7 @@ p {
 }
 
 .form-group label {
-    color: #FEC882;
+    color: #8B4513;
     font-weight: bold;
     font-size: 1rem;
 }
@@ -372,10 +393,10 @@ p {
 .form-group select,
 .form-group textarea {
     padding: 12px 15px;
-    border: 2px solid #5B692C;
+    border: 2px solid #8B4513;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #FAF6EE;
+    background-color: rgba(245, 245, 220, 0.3);
+    color: #654321;
     font-size: 16px;
     font-family: inherit;
     transition: border-color 0.3s;
@@ -384,7 +405,8 @@ p {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #DAA520;
+    border-color: #8B4513;
+    background-color: rgba(245, 245, 220, 0.5);
 }
 
 .form-group textarea {
@@ -393,14 +415,14 @@ p {
 }
 
 .form-group select option {
-    background-color: rgba(20, 20, 20, 0.95);
-    color: #FAF6EE;
+    background-color: rgba(245, 245, 220, 0.95);
+    color: #654321;
 }
 
 .submit-review-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg, #5B692C, #CE8B44);
-    color: #FAF6EE;
+    background: linear-gradient(135deg, #8B4513, #D2691E);
+    color: #F5F5DC;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -408,11 +430,13 @@ p {
     cursor: pointer;
     transition: all 0.3s ease;
     align-self: flex-start;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .submit-review-btn:hover {
-    background: linear-gradient(135deg, #5B692C, #FEC882);
+    background: linear-gradient(135deg, #A0522D, #CD853F);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
 .review-message {
@@ -453,8 +477,8 @@ p {
 }
 
 .review-card {
-    background-color: rgba(91, 105, 44, 0.2);
-    border: 1px solid #5B692C;
+    background-color: rgba(245, 245, 220, 0.3);
+    border: 1px solid #8B4513;
     border-radius: 12px;
     padding: 20px;
     transition: transform 0.2s ease;
@@ -473,18 +497,18 @@ p {
 }
 
 .reviewer-info strong {
-    color: #FEC882;
+    color: #8B4513;
     font-size: 1.1rem;
 }
 
 .review-rating {
-    color: #FEC882;
+    color: #D2691E;
     font-size: 1.2rem;
     margin-top: 5px;
 }
 
 .review-text {
-    color: #FAF6EE;
+    color: #654321;
     line-height: 1.5;
     font-size: 1rem;
 }
@@ -492,10 +516,10 @@ p {
 .no-reviews {
     text-align: center;
     padding: 40px;
-    color: #FAF6EE;
+    color: #654321;
     font-size: 1.1rem;
-    background-color: rgba(139, 69, 19, 0.1);
-    border: 1px solid #5B692C;
+    background-color: rgba(245, 245, 220, 0.2);
+    border: 1px solid #8B4513;
     border-radius: 10px;
 }
 

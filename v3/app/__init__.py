@@ -2,6 +2,8 @@ from flask import Flask
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
+from flask import send_from_directory
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -18,10 +20,10 @@ def create_app(config_class="config.DevelopmentConfig"):
     # Crate Api instance
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v1/')
 
-    from app.api.v2.users import api as users_ns
-    from app.api.v2.amenities import api as amenities_ns
-    from app.api.v2.places import api as places_ns
-    from app.api.v2.reviews import api as reviews_ns
+    from app.api.v3.users import api as users_ns
+    from app.api.v3.amenities import api as amenities_ns
+    from app.api.v3.places import api as places_ns
+    from app.api.v3.reviews import api as reviews_ns
 
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(amenities_ns, path="/api/v1/amenities")
@@ -51,5 +53,14 @@ def create_app(config_class="config.DevelopmentConfig"):
         """Handle database errors gracefully"""
         db.session.rollback()
         return {'error': 'Internal server error'}, 500
+
+    # Enable CORS for frontend
+    CORS(app, supports_credentials=True)
+
+    # Serve static files
+    @app.route('/')
+    @app.route('/<path:filename>')
+    def serve_static(filename='index.html'):
+        return send_from_directory('front_end', filename)
 
     return app

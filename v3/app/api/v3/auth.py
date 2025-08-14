@@ -44,3 +44,10 @@ class ProtectedResource(Resource):
             'last_name': user.last_name,
             'email': user.email
         }, 200
+
+# Add to app/api/v2/auth.py
+@auth_api.route('/logout')
+class Logout(Resource):
+    def post(self):
+        session.clear()
+        return {'message': 'Logged out successfully'}, 200

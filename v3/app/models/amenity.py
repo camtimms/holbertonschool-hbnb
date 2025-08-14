@@ -15,7 +15,7 @@ place_amenity_asc = db.Table('place_amenity_asc',
 
 
 class Amenity(BaseModel):
-    __tablename__ = 'amenties'
+    __tablename__ = 'amenities'
 
     _name = db.Column("name", db.String(50), nullable=False)
 

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Guild - HBnB DnD</title>
+    <link rel="stylesheet" href="login_styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="nav-left">
+                <img src="images/logo2.png" alt="HBnB DnD Logo" class="logo">
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="places.html" class="nav-link">All Places</a>
+            </div>
+            <div class="nav-right">
+                <a href="login.html" class="login-button">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">Join the Guild</h1>
+            <p class="login-subtitle">Create your adventurer's account</p>
+
+            <form class="login-form" id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="first_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="last_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <small style="color: #E6E6FA; font-size: 12px;">Password must be at least 6 characters long</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button type="submit" class="login-btn">Join the Adventure</button>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div id="successMessage" class="success-message" style="display: none;"></div>
+            </form>
+
+            <div class="signup-link">
+                <p>Already have an account? <a href="login.html">Sign in here</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 HBnB DnD. All rights reserved to the Guild of Adventurers.</p>
+    </footer>
+
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            // Hide previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            // Validate password confirmation
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Validate password length
+            if (password.length < 6) {
+                errorDiv.textContent = 'Password must be at least 6 characters long';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Registration successful
+                    successDiv.textContent = 'Account created successfully! Redirecting to login...';
+                    successDiv.style.display = 'block';
+
+                    // Redirect to login page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    // Show error message
+                    errorDiv.textContent = data.error || 'Registration failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Network error. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/v1/auth/protected', {
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    // Already logged in, redirect to home
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                // Not logged in, stay on registration page
+            }
+        });
+
+        // Real-time password confirmation validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = '#ff6b6b';
+            } else {
+                this.style.borderColor = '#8B4513';
+            }
+        });
+    </script>
+
+    <style>
+        .success-message {
+            background-color: rgba(40, 167, 69, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+            border: 1px solid #28a745;
+        }
+
+        .form-group small {
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</body>
+</html>

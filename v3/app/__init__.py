@@ -1,16 +1,19 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_session import Session
 from datetime import timedelta
+from flask_cors import CORS
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
 def create_app(config_class="config.DevelopmentConfig"):
-    app = Flask(__name__)
+    app = Flask(__name__,
+                static_folder='static',  # For CSS, JS, images
+                template_folder='templates')  # For HTML templates
     app.config.from_object(config_class)
 
     #Session configuration
@@ -62,5 +65,26 @@ def create_app(config_class="config.DevelopmentConfig"):
         """Handle database errors gracefully"""
         db.session.rollback()
         return {'error': 'Internal server error'}, 500
+
+    # Enable CORS for frontend
+    CORS(app, supports_credentials=True)
+
+    # Template routes (instead of static file serving)
+    @app.route('/')
+    def index():
+        return render_template('index/index.html')
+
+    @app.route('/login')
+    def login():
+        return render_template('login/login.html')
+
+    @app.route('/register')
+    def register():
+        return render_template('login/registration.html')
+
+    @app.route('/place')
+    @app.route('/place/<place_id>')
+    def place_details(place_id=None):
+        return render_template('place_details/place_details.html')
 
     return app

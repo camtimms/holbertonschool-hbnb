@@ -121,16 +121,12 @@ function displayPlaceDetails(place) {
     document.getElementById('placePrice').textContent = `${place.price} gold`;
     document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
 
-    // Set host name based on place ID
-    const hostMapping = {
-        '1': 'Guild Master Thorin',      // Dragon's Rest Tavern
-        '2': 'Forest Keeper Elaria',    // Cozy Woodland Cabin
-        '3': 'Fae Queen Titania',       // Ethereal Fae Retreat
-        '4': 'Castle Steward Magnus'    // Royal Castle Quarters
-    };
-    
-    const hostName = hostMapping[place.id] || 'Guild Master';
-    document.getElementById('hostName').textContent = hostName;
+    // Load host information from API using owner_id
+    if (place.owner_id) {
+        loadHostInfo(place.owner_id);
+    } else {
+        document.getElementById('hostName').textContent = 'Unknown Host';
+    }
 
     // Set image using API-provided URL
     const imgEl = document.getElementById('placeImage');
@@ -163,7 +159,7 @@ function displayPlaceDetails(place) {
 // Load host information from API
 async function loadHostInfo(ownerId) {
     try {
-        const response = await fetch(`/api/v3/users/${ownerId}`, {
+        const response = await fetch(`/api/v3/users/${ownerId}/public`, {
             credentials: 'include'
         });
         

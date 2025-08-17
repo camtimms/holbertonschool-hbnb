@@ -2,6 +2,7 @@
 
 let currentPlaceId = null;
 let currentUser = null;
+let amenitiesData = {}; // Cache for amenity ID to name mapping
 
 // Get place ID from URL
 function getPlaceIdFromUrl() {
@@ -58,13 +59,37 @@ function displayPlaceDetails(place) {
     document.getElementById('placeTitle').textContent = place.title;
     document.getElementById('placeImage').src = place.image;
     document.getElementById('placeImage').alt = place.title;
-    document.getElementById('hostName').textContent = place.host?.first_name || 'Unknown';
+    // Load host information from API using owner_id
+    if (place.owner_id) {
+        loadHostInfo(place.owner_id);
+    } else {
+        document.getElementById('hostName').textContent = 'Unknown Host';
+    }
     document.getElementById('placePrice').textContent = `${place.price} Gold`;
     document.getElementById('placeDescription').textContent = place.description;
     document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
     
     // Load amenities
     loadAmenities(place.amenities);
+}
+
+// Load amenities data for ID to name mapping
+async function loadAmenitiesData() {
+    try {
+        const response = await fetch('/api/v3/amenities/', {
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const amenities = await response.json();
+            // Create ID to name mapping
+            amenities.forEach(amenity => {
+                amenitiesData[amenity.id] = amenity.name;
+            });
+        }
+    } catch (error) {
+        console.error('Error loading amenities data:', error);
+    }
 }
 
 // Load amenities
@@ -76,10 +101,12 @@ function loadAmenities(amenities) {
         amenitiesSection.style.display = 'block';
         amenitiesList.innerHTML = '';
         
-        amenities.forEach(amenity => {
+        amenities.forEach(amenityId => {
             const amenityTag = document.createElement('span');
             amenityTag.className = 'amenity-tag';
-            amenityTag.textContent = amenity.name;
+            // Get amenity name from cached data, fallback to ID if not found
+            const amenityName = amenitiesData[amenityId] || amenityId;
+            amenityTag.textContent = amenityName;
             amenitiesList.appendChild(amenityTag);
         });
     }
@@ -204,7 +231,7 @@ async function submitReview(event) {
         });
         
         if (response.ok) {
-            const result = await response.json();
+            await response.json();
             showMessage('Review submitted successfully! Redirecting...', 'success');
             
             // Redirect back to place details after 2 seconds
@@ -223,6 +250,25 @@ async function submitReview(event) {
         submitBtn.disabled = false;
         btnText.style.display = 'inline';
         btnLoading.style.display = 'none';
+    }
+}
+
+// Load host information from API
+async function loadHostInfo(ownerId) {
+    try {
+        const response = await fetch(`/api/v3/users/${ownerId}/public`, {
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const user = await response.json();
+            document.getElementById('hostName').textContent = `${user.first_name} ${user.last_name}`;
+        } else {
+            document.getElementById('hostName').textContent = 'Unknown Host';
+        }
+    } catch (error) {
+        console.error('Error loading host info:', error);
+        document.getElementById('hostName').textContent = 'Unknown Host';
     }
 }
 
@@ -258,6 +304,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, 3000);
         return;
     }
+    
+    // Load amenities data first, then place details that depend on it
+    await loadAmenitiesData();
     
     // Load place details
     await loadPlaceDetails();

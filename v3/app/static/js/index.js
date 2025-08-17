@@ -72,7 +72,7 @@ function displayPlaces() {
         `;
 
         card.addEventListener('click', () => {
-            window.location.href = `place-detail.html?id=${place.id}`;
+            window.location.href = `/place/${place.id}`;
         });
 
         cardRow.appendChild(card);
@@ -116,9 +116,26 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.status === 200 ? res.json() : Promise.reject())
     .then(user => {
         document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("userInfo").style.display = "block";
         document.getElementById("welcomeMsg").textContent = `Welcome, ${user.first_name}!`;
     })
     .catch(() => {
         document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("userInfo").style.display = "none";
     });
 });
+
+// Logout function
+async function logout() {
+    try {
+        await fetch('/api/v3/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        
+        // Redirect to home page to refresh authentication state
+        window.location.href = '/';
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}

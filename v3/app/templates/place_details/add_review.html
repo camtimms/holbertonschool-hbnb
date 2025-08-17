@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review - HBnB DnD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/place_details_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_review_styles.css') }}">
+</head>
+<body>
+    {% include 'includes/header.html' %}
+
+    <main class="place-main">
+        <div class="place-container">
+            <div id="loadingState" class="loading">
+                <h2>Loading place details...</h2>
+            </div>
+
+            <div id="errorState" class="error" style="display: none;">
+                <h2>Error Loading Place</h2>
+                <p>We couldn't load the place details. Please try again.</p>
+                <button onclick="window.history.back()" class="retry-btn">Go Back</button>
+            </div>
+
+            <section id="placeDetailsSection" class="place-details" style="display: none;">
+                <div class="place-header">
+                    <button onclick="goBackToPlace()" class="back-btn">← Back to Place Details</button>
+                    <h1 id="placeTitle" class="place-title">Loading...</h1>
+                </div>
+
+                <div class="place-info">
+                    <div class="left-column">
+                        <div class="place-image-container">
+                            <img id="placeImage" src="" alt="Place Image" class="place-main-image">
+                        </div>
+                        
+                        <div class="amenities-section" id="amenitiesSection" style="display: none;">
+                            <h3>What this place offers</h3>
+                            <div id="amenitiesList" class="amenities-list">
+                                <!-- Amenities will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="place-details-content">
+                        <div class="host-info">
+                            <h3>Hosted by <span id="hostName">Loading...</span></h3>
+                        </div>
+
+                        <div class="price-info">
+                            <span id="placePrice" class="price">Loading...</span>
+                            <span class="period">per night</span>
+                        </div>
+
+                        <div class="description-section">
+                            <h3>About this place</h3>
+                            <p id="placeDescription">Loading description...</p>
+                        </div>
+
+                        <div class="location-section">
+                            <h3>Location</h3>
+                            <p>Coordinates: <span id="placeLocation">Loading...</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Review Form Section -->
+            <section class="add-review-section">
+                <div class="add-review-form-container">
+                    <h2>📝 Write Your Review</h2>
+                    <p class="review-intro">Share your adventure and help other travelers!</p>
+
+                    <form id="addReviewForm" class="review-form">
+                        <div class="form-group">
+                            <label for="reviewRating">Rating *</label>
+                            <div class="rating-container">
+                                <select id="reviewRating" name="rating" required>
+                                    <option value="">Choose your rating</option>
+                                    <option value="1">⭐ 1 - Poor</option>
+                                    <option value="2">⭐⭐ 2 - Fair</option>
+                                    <option value="3">⭐⭐⭐ 3 - Good</option>
+                                    <option value="4">⭐⭐⭐⭐ 4 - Very Good</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reviewText">Your Review *</label>
+                            <textarea id="reviewText" name="text" required 
+                                    placeholder="Tell us about your stay! What did you enjoy most? How was the location, amenities, and overall experience?"
+                                    minlength="10" maxlength="1000"></textarea>
+                            <small class="char-count">0/1000 characters</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" onclick="goBackToPlace()" class="cancel-btn">Cancel</button>
+                            <button type="submit" class="submit-review-btn">
+                                <span class="btn-text">Submit Review</span>
+                                <span class="btn-loading" style="display: none;">Submitting...</span>
+                            </button>
+                        </div>
+
+                        <div id="reviewMessage" class="review-message" style="display: none;"></div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/add_review.js') }}"></script>
+</body>
+</html>

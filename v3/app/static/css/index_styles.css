@@ -20,21 +20,15 @@ body {
 
 .places-container {
   width: 100%;
-  min-width: 1200px;
-  max-width: 1200px;
-  min-height: 500px;
   margin: 120px auto 5vh auto;
   flex: 1;
   
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   
-  gap: 20px;
-  padding: 20px;
-  
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .filter-container {
@@ -191,22 +185,29 @@ body {
   position: relative;
 }
 
+.card-row {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
 .card-row::-webkit-scrollbar {
-  display: none;
+  display: none; /* WebKit browsers */
+  width: 0;
+  height: 0;
 }
 
 .card-scroll-wrapper {
-  width: 100vw;
+  width: 1400px;
+  height: 700px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   background-image: url('../images/wide scroll.png');
-  background-size: cover;
+  background-size: 1400px 700px;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 80vh;
-  margin: 0 calc(-50vw + 50%);
+  margin: 0 auto;
   overflow: visible;
 }
 
@@ -214,9 +215,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1200px;
-  max-width: 90%;
-  padding: 60px 40px;
+  width: 1100px;
+  height: 100%;
+  padding: 120px 60px 60px 60px;
   z-index: 5;
 }
 
@@ -230,119 +231,46 @@ body {
   gap: 20px;
 }
 
+.card-title {
+  margin-left: 40px;
+}
+
 .scroll-btn {
-  background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.8));
-  color: #FAF6EE;
-  border: 2px solid #8B4513;
-  padding: 15px 20px;
-  font-size: 28px;
+  background: none;
+  color: #8B4513;
+  border: none;
+  padding: 10px;
+  font-size: 40px;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 50%;
   transition: all 0.3s ease;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(5px);
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .scroll-btn:hover {
-  background: linear-gradient(135deg, rgba(139, 69, 19, 1), rgba(210, 105, 30, 1));
-  border-color: #654321;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  color: #654321;
+  transform: translateY(-50%) scale(1.2);
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .scroll-btn:active {
-  transform: translateY(-50%) scale(0.95);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%) scale(0.9);
+  color: #5B4513;
 }
 
 .scroll-btn.left {
-  left: 10px;
+  left: 120px;
 }
 
 .scroll-btn.right {
-  right: 10px;
+  right: 120px;
 }
 
-/* Mobile responsive updates for header spacing */
-@media (max-width: 768px) {
-  .places-container {
-    margin: 110px 0 5vh 0;
-    min-width: unset;
-    width: 100%;
-    padding: 0;
-  }
-  
-  .card-scroll-wrapper {
-    min-height: 70vh;
-  }
-  
-  .scroll-content {
-    width: 100%;
-    max-width: 95%;
-    padding: 40px 20px;
-  }
-  
-  .scroll-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .card-title {
-    font-size: 2rem;
-  }
-  
-  .filter-container {
-    font-size: medium;
-    gap: 10px;
-  }
-  
-  .filter-select {
-    width: 180px;
-    font-size: 12px;
-  }
-  
-  .scroll-btn {
-    padding: 10px 15px;
-    font-size: 20px;
-  }
-  
-  .scroll-btn.left {
-    left: 10px;
-  }
-  
-  .scroll-btn.right {
-    right: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-scroll-wrapper {
-    min-height: 60vh;
-  }
-  
-  .scroll-content {
-    padding: 30px 15px;
-  }
-  
-  .card-title {
-    font-size: 1.8rem;
-  }
-  
-  .filter-select {
-    width: 160px;
-  }
-  
-  .scroll-btn {
-    padding: 8px 12px;
-    font-size: 18px;
-  }
-}
+/* Desktop-only design - no mobile responsiveness needed */
 
 .footer {
   background-color: #201D16;

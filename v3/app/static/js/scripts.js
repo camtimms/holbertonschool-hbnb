@@ -2,13 +2,13 @@
 function scrollBack() {
   const row = document.getElementById('cardRow');
   console.log('scrollLeft clicked, scrollLeft =', row.scrollLeft);
-  row.scrollBy({ left: -365, behavior: 'smooth' });
+  row.scrollBy({ left: -360, behavior: 'smooth' });
 }
 
 function scrollRight() {
   const row = document.getElementById('cardRow');
   console.log('scrollRight clicked, scrollLeft =', row.scrollLeft);
-  row.scrollBy({ left: 365, behavior: 'smooth' });
+  row.scrollBy({ left: 360, behavior: 'smooth' });
 }
 
 const places = [
@@ -19,8 +19,11 @@ const places = [
 ];
 
 const cardRow = document.getElementById('cardRow');
+
+
 // dynamic creation of cards
 places.forEach(place => {
+
   const card = document.createElement('div');
   card.className = 'place-card';
   card.setAttribute('data-price', place.price);
@@ -30,6 +33,13 @@ places.forEach(place => {
   img.src = place.image;
   img.alt = place.name;
   img.className = 'card-img';
+  
+  const amenitiesCount = place.amenities ? place.amenities.length : 0;
+  const amenitiesCountSpan = document.createElement('span');
+  amenitiesCountSpan.className = 'amenities-count';
+  amenitiesCountSpan.textContent = `🔮 ${amenitiesCount} amenit${amenitiesCount === 1 ? 'y' : 'ies'}`;
+
+
 
   // Wrap title inside a content container
   const content = document.createElement('div');
@@ -53,6 +63,7 @@ places.forEach(place => {
   rating.textContent = `⭐ ${place.rating}`;
 
   bottomBar.appendChild(price);
+  bottomBar.appendChild(amenitiesCountSpan);
   bottomBar.appendChild(rating);
 
   // Assemble card
@@ -61,8 +72,34 @@ places.forEach(place => {
   card.appendChild(desc);        // description
   card.appendChild(bottomBar);   // price & rating
 
+   card.addEventListener('click', () => {
+    window.location.href = `place-detail.html?id=${place.id}`;
+  });
+
   cardRow.appendChild(card);
 });
+
+// search funcitonality
+function handleSearch(event) {
+  event.preventDefault(); // Prevent form from submitting and reloading
+
+  const searchInput = document.getElementById('search-input');
+  const query = searchInput.value.toLowerCase();
+  const cards = document.querySelectorAll('.place-card');
+
+  cards.forEach(card => {
+    const title = card.querySelector('h3').textContent.toLowerCase();
+    const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+
+    if (title.includes(query) || desc.includes(query)) {
+      card.style.display = '';  // show card
+    } else {
+      card.style.display = 'none';  // hide card
+    }
+  });
+}
+
+
 
 // dynamic filtering
 document.getElementById('filter').addEventListener('change', function() {
@@ -80,7 +117,7 @@ document.getElementById('filter').addEventListener('change', function() {
 });
 
 // login required
-fetch('/api/v3/auth/protected', {
+fetch('/auth/protected', {
     method: 'GET',
     credentials: 'include' // send session cookie
 })
@@ -99,8 +136,9 @@ fetch('/api/v3/auth/protected', {
     }
 })
 .catch(err => console.error('Error checking login:', err));
+
 // post request for login
-fetch('/api/v3/auth/login', {
+fetch('/auth/login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -122,7 +160,7 @@ fetch('/api/v3/auth/login', {
 });
 // remove login button if logged in
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/api/v3/auth/protected", {
+  fetch("/auth/protected", {
     method: "GET",
     credentials: "include" // for session cookies
   })
@@ -143,5 +181,4 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loginBtn").style.display = "block"; // show login button
   });
 });
-
 

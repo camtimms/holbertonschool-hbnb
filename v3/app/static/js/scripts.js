@@ -116,6 +116,12 @@ document.getElementById('filter').addEventListener('change', function() {
   });
 });
 
+// login page transfer
+
+login-btn.addEventListener('click', () => {
+    window.location.href = `/login`;
+})
+
 // login required
 fetch('/auth/protected', {
     method: 'GET',

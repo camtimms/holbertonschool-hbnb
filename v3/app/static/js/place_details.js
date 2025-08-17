@@ -132,25 +132,32 @@ async function loadPlaceDetails() {
 
 // Display place details
 function displayPlaceDetails(place) {
-    document.getElementById('placeTitle').textContent = place.title || 'Unknown Place';
-    document.getElementById('placeDescription').textContent = place.description || 'No description available';
-    document.getElementById('placePrice').textContent = `${place.price || 0} gold`;
-    document.getElementById('placeLocation').textContent = `${place.latitude || 0}, ${place.longitude || 0}`;
-    
-    // Get host name using dynamic mapping or load from API
-    const hostName = getHostName(place);
-    if (hostName) {
-        document.getElementById('hostName').textContent = hostName;
-    } else if (place.owner_id) {
-        loadHostInfo(place.owner_id);
-    } else {
-        document.getElementById('hostName').textContent = 'Unknown Host';
-    }
+    document.getElementById('placeTitle').textContent = place.title;
+    document.getElementById('placeDescription').textContent = place.description;
+    document.getElementById('placePrice').textContent = `${place.price} gold`;
+    document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
+    document.getElementById('placeImage').src = `/static/images/${currentPlace.image}`;
+    document.getElementById('placeImage').alt = currentPlace.title;
 
-    // Set image using dynamic mapping
-    const imageName = getPlaceImage(place);
-    document.getElementById('placeImage').src = `/static/images/${imageName}`;
-    document.getElementById('placeImage').alt = place.title || 'Place Image';
+    // Set host name based on place ID
+    const hostMapping = {
+        '1': 'Guild Master Thorin',      // Dragon's Rest Tavern
+        '2': 'Forest Keeper Elaria',    // Cozy Woodland Cabin
+        '3': 'Fae Queen Titania',       // Ethereal Fae Retreat
+        '4': 'Castle Steward Magnus'    // Royal Castle Quarters
+    };
+    
+    const hostName = hostMapping[place.id] || 'Guild Master';
+    document.getElementById('hostName').textContent = hostName;
+
+    const imgEl = document.getElementById('placeImage');
+    const defaultImg = '/static/images/default-placeholder.jpeg'; // ensure this exists
+    if (place.image && typeof place.image === 'string' && place.image.length > 0) {
+        imgEl.src = place.image; // <-- use backend-provided URL directly
+    } else {
+        imgEl.src = defaultImg;
+    }
+    imgEl.alt = place.title || 'Place image';
 
     // Display amenities if they exist
     if (place.amenities && place.amenities.length > 0) {
@@ -355,4 +362,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to initialize page:', err);
     }
 });
+
 

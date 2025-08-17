@@ -11,15 +11,14 @@ function scrollRight() {
   row.scrollBy({ left: 360, behavior: 'smooth' });
 }
 
-const places = [
-    { name: "Tavern", description: "Cool spot #1", price: 75, rating: 4.5, image: "/static/images/place1.jpeg"},
-    { name: "Cozy cabin", description: "Awesome place #2", price: 100, rating: 4.3, image: "/static/images/place2.jpeg"},
-    { name: "Fae retreat", description: "Nice view #3", price: 200, rating: 4.5, image: "/static/images/place3.jpeg"},
-    { name: "Castle quarters", description: "Hidden gem #4", price: 300, rating: 4.5, image: "/static/images/place4.jpeg"},
-];
-
 const cardRow = document.getElementById('cardRow');
 
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("http://localhost:5000/api/v3/places/") // your API endpoint
+    .then(response => response.json())
+    .then(places => {
+      // Clear any existing
+      cardRow.innerHTML = "";
 
 // dynamic creation of cards
 places.forEach(place => {
@@ -73,9 +72,8 @@ places.forEach(place => {
   card.appendChild(bottomBar);   // price & rating
 
    card.addEventListener('click', () => {
-    window.location.href = `place-detail.html?id=${place.id}`;
-  });
-
+    window.location.href = `/place/${place.id}`;
+   });
   cardRow.appendChild(card);
 });
 

@@ -1,7 +1,9 @@
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
+            <a href = 'http://127.0.0.1:5000/'>
             <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="HBnB Logo">
+            </a>
         </div>
         <div class="nav-center">
              <form class="search-form" onsubmit="handleSearch(event)">
@@ -19,14 +21,11 @@
             </select>
         </div>
         <div class="nav-right">
-            <div id="loginBtn">
+            <div id="login-btn">
                 <a href="{{ url_for('login') }}" class="login-btn">Login</a>
             </div>
             <div id="userInfo" style="display: none;">
                 <span id="welcomeMsg">Welcome!</span>
                 <button onclick="logout()" class="logout-btn">Logout</button>
-            </div>
-            <a href="{{ url_for('index') }}" class="nav-btn">Home</a>
-        </div>
     </div>
 </nav>

@@ -4,13 +4,13 @@ This is a amenity class
 """
 from app import db
 from sqlalchemy.orm import relationship
-from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy import Table, Column, Integer, ForeignKey, String
 from . import BaseModel
 
 # Association table for many-to-many relationship
 place_amenity_asc = db.Table('place_amenity_asc',
-    Column('amenity_id', Integer, ForeignKey('amenities.id'), primary_key=True),
-    Column('place_id', Integer, ForeignKey('places.id'), primary_key=True)
+    Column('amenity_id', String(36), ForeignKey('amenities.id'), primary_key=True),
+    Column('place_id', String(36), ForeignKey('places.id'), primary_key=True)
 )
 
 

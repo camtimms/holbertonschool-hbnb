@@ -401,7 +401,7 @@ function showError() {
 
 // Go back to places list
 function goBack() {
-    window.history.back();
+    window.location.href = '/'
 }
 
 // Initialize page
@@ -421,3 +421,4 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPlaceDetails().catch(err => console.error('Failed to load place details:', err));
     loadReviews().catch(err => console.error('Failed to load reviews:', err));
 });
+

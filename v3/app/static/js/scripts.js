@@ -117,13 +117,12 @@ document.getElementById('filter').addEventListener('change', function() {
 });
 
 // login page transfer
-
-login-btn.addEventListener('click', () => {
+document.getElementById('login-btn').addEventListener('click', () => {
     window.location.href = `/login`;
 })
 
 // login required
-fetch('/auth/protected', {
+fetch('/api/v3/auth/protected', {
     method: 'GET',
     credentials: 'include' // send session cookie
 })
@@ -144,7 +143,7 @@ fetch('/auth/protected', {
 .catch(err => console.error('Error checking login:', err));
 
 // post request for login
-fetch('/auth/login', {
+fetch('/api/v3/auth/login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -166,7 +165,7 @@ fetch('/auth/login', {
 });
 // remove login button if logged in
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/auth/protected", {
+  fetch("/api/v3/auth/protected", {
     method: "GET",
     credentials: "include" // for session cookies
   })

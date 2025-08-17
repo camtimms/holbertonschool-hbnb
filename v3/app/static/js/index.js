@@ -33,7 +33,7 @@ places.forEach(place => {
   img.src = place.image;
   img.alt = place.name;
   img.className = 'card-img';
-  
+
   const amenitiesCount = place.amenities ? place.amenities.length : 0;
   const amenitiesCountSpan = document.createElement('span');
   amenitiesCountSpan.className = 'amenities-count';
@@ -117,7 +117,7 @@ document.getElementById('filter').addEventListener('change', function() {
 });
 
 // login required
-fetch('/auth/protected', {
+fetch('/api/v3/auth/protected', {
     method: 'GET',
     credentials: 'include' // send session cookie
 })
@@ -138,7 +138,7 @@ fetch('/auth/protected', {
 .catch(err => console.error('Error checking login:', err));
 
 // post request for login
-fetch('/auth/login', {
+fetch('/api/v3/auth/login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -160,7 +160,7 @@ fetch('/auth/login', {
 });
 // remove login button if logged in
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/auth/protected", {
+  fetch("/api/v3/auth/protected", {
     method: "GET",
     credentials: "include" // for session cookies
   })

@@ -19,7 +19,8 @@ class Place(BaseModel):
     _longitude = db.Column("longitude", db.Float(), nullable=False)
     _owner_id = db.Column("owner_id", db.String(36), ForeignKey('users.id'), nullable=False)
 
-    # Implement one to many relationship
+    # Implement relationships
+    owner = relationship('User', lazy=True)
     reviews = relationship('Review', back_populates='place', lazy=True)
     amenities = relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
 
@@ -33,7 +34,8 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner = owner
+        self.owner = owner  # SQLAlchemy relationship
+        self.owner_id = owner.id  # Foreign key
         self.reviews = []  # List to store related reviews
         self.amenities = []  # List to store related amenities
 
@@ -104,17 +106,14 @@ class Place(BaseModel):
             raise ValueError("Invalid value specified for Longitude")
 
     @property
-    def owner(self):
-        """ Returns value of property owner """
-        return self._owner
+    def owner_id(self):
+        """ Returns value of property owner_id """
+        return self._owner_id
 
-    @owner.setter
-    def owner(self, value):
-        """Setter for prop owner"""
-        if isinstance(value, User):
-            self._owner = value
-        else:
-            raise ValueError("Invalid object type passed in for owner!")
+    @owner_id.setter
+    def owner_id(self, value):
+        """Setter for prop owner_id"""
+        self._owner_id = value
 
     # --- Methods ---
     def add_review(self, review):

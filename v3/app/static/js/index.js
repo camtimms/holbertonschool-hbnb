@@ -7,45 +7,45 @@ function scrollRight() {
     document.getElementById('cardRow').scrollBy({ left: 360, behavior: 'smooth' });
 }
 
-// Sample places data
-const places = [
-    { 
-        id: "1", 
-        title: "Dragon's Rest Tavern", 
-        description: "A legendary tavern where heroes gather", 
-        price: 75, 
-        rating: 4.5,
-        amenities: ["Hot Meals", "Finest Ale", "Magical Warmth"], 
-        image: "/static/images/place1.jpeg"
-    },
-    { 
-        id: "2", 
-        title: "Cozy Woodland Cabin", 
-        description: "A charming cabin in the enchanted forest", 
-        price: 100, 
-        rating: 4.3,
-        amenities: ["Stone Fireplace", "Forest Views"], 
-        image: "/static/images/place2.jpeg"
-    },
-    { 
-        id: "3", 
-        title: "Ethereal Fae Retreat", 
-        description: "A magical sanctuary where worlds meet", 
-        price: 200, 
-        rating: 4.8,
-        amenities: ["Magical Gardens", "Crystal Formations"], 
-        image: "/static/images/place3.jpeg"
-    },
-    { 
-        id: "4", 
-        title: "Royal Castle Quarters", 
-        description: "Luxurious accommodations in an ancient castle", 
-        price: 300, 
-        rating: 4.7,
-        amenities: ["Royal Treatment", "Four-Poster Beds", "Castle Views"], 
-        image: "/static/images/place4.jpeg"
+// Dynamic places data loaded from API
+let places = [];
+
+// Dynamic image mapping for places
+function getPlaceImage(place) {
+    const titleImageMap = {
+        'Dragon\'s Rest Tavern': 'place1.jpeg',
+        'Cozy Woodland Cabin': 'place2.jpeg', 
+        'Ethereal Fae Retreat': 'place3.jpeg',
+        'Royal Castle Quarters': 'place4.jpeg'
+    };
+    
+    return titleImageMap[place.title] || 'default_place.jpg';
+}
+
+// Load places from API
+async function loadPlaces() {
+    try {
+        const response = await fetch('/api/v3/places/', {
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const placesData = await response.json();
+            places = placesData.map(place => ({
+                ...place,
+                rating: 4.5, // Default rating since API doesn't provide it
+                image: `/static/images/${getPlaceImage(place)}`
+            }));
+            displayPlaces();
+        } else {
+            console.error('Failed to load places from API');
+            // Keep empty places array so page doesn't break
+        }
+    } catch (error) {
+        console.error('Error loading places:', error);
+        // Keep empty places array so page doesn't break
     }
-];
+}
 
 // Create and display place cards
 function displayPlaces() {
@@ -106,7 +106,8 @@ document.getElementById('filter').addEventListener('change', function() {
 
 // Initialize when page loads
 document.addEventListener("DOMContentLoaded", () => {
-    displayPlaces();
+    // Load places from API first
+    loadPlaces();
     
     // Auth check
     fetch("/api/v3/auth/protected", {

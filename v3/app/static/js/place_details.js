@@ -4,19 +4,6 @@ let placeId = null;
 let userHasReviewed = false;
 let amenitiesData = {}; // Cache for amenity ID to name mapping
 
-// Dynamic image mapping based on place data
-function getPlaceImage(place) {
-    // Map by title only - works regardless of database IDs
-    const titleImageMap = {
-        'Dragon\'s Rest Tavern': 'place1.jpeg',
-        'Cozy Woodland Cabin': 'place2.jpeg', 
-        'Ethereal Fae Retreat': 'place3.jpeg',
-        'Royal Castle Quarters': 'place4.jpeg'
-    };
-    
-    // Use title mapping or default image
-    return titleImageMap[place.title] || 'default_place.jpg';
-}
 
 // Dynamic host name mapping based on place data
 function getHostName(place) {
@@ -136,8 +123,6 @@ function displayPlaceDetails(place) {
     document.getElementById('placeDescription').textContent = place.description;
     document.getElementById('placePrice').textContent = `${place.price} gold`;
     document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
-    document.getElementById('placeImage').src = `/static/images/${currentPlace.image}`;
-    document.getElementById('placeImage').alt = currentPlace.title;
 
     // Set host name based on place ID
     const hostMapping = {
@@ -150,12 +135,12 @@ function displayPlaceDetails(place) {
     const hostName = hostMapping[place.id] || 'Guild Master';
     document.getElementById('hostName').textContent = hostName;
 
+    // Set image using API-provided URL
     const imgEl = document.getElementById('placeImage');
-    const defaultImg = '/static/images/default-placeholder.jpeg'; // ensure this exists
     if (place.image && typeof place.image === 'string' && place.image.length > 0) {
-        imgEl.src = place.image; // <-- use backend-provided URL directly
+        imgEl.src = place.image;
     } else {
-        imgEl.src = defaultImg;
+        imgEl.src = '/static/images/hbnb-logo.png';
     }
     imgEl.alt = place.title || 'Place image';
 

@@ -2,7 +2,6 @@ from flask_restx import Namespace, Resource, fields
 from flask import request, session, url_for
 from app.services import facade
 from functools import wraps
-import urllib.parse
 
 api = Namespace('places', description='Place operations')
 
@@ -33,7 +32,7 @@ place_model = api.model('Place', {
 def serialize_place(place):
     """Helper function to serialize place object consistently"""
 
-    filename = urllib.parse.quote(place.title) + ".jpg"
+    filename = place.title + ".jpg"
     image_url = url_for('static', filename=f'images/{filename}', _external=True)
 
     amenities_list = []

@@ -278,7 +278,7 @@ body {
 .card-content {
   height: 30px; 
   background-color: #fdfdfd;
-  padding: 16px;
+  padding: 8px 16px;
   box-sizing: border-box;
   flex-shrink: 0;
   overflow: hidden; 
@@ -286,6 +286,13 @@ body {
   flex-direction: column;
   justify-content: center; 
   margin: 0; 
+}
+
+.card-content h3 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 600;
+  color: #333;
 }
 
 .card-bottom-bar {

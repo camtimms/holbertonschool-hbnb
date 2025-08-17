@@ -14,23 +14,23 @@
 
   <main>
   <section class="places-container">
-    <div class="filter-container">
-      <label for="filter">Filter:</label>
-      <select id="filter" class="filter-select">
-        <option value="0">All prices</option>
-        <option value="100">Up to 100 gold</option>
-        <option value="200">Up to 200 gold</option>
-        <option value="300">Up to 300 gold</option>
-      </select>
-    </div>
-
-    <div class="places-inner">
-      <h1 class="card-title">Popular Places</h1>
-    </div>
-
     <div class="card-scroll-wrapper">
+      <div class="scroll-content">
+        <div class="scroll-header">
+          <h1 class="card-title">Popular Places</h1>
+          <div class="filter-container">
+            <label for="filter">Filter:</label>
+            <select id="filter" class="filter-select">
+              <option value="0">All prices</option>
+              <option value="100">Up to 100 gold</option>
+              <option value="200">Up to 200 gold</option>
+              <option value="300">Up to 300 gold</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-row" id="cardRow"></div>
+      </div>
       <button class="scroll-btn left" onclick="scrollBack()">&#8249;</button>
-      <div class="card-row" id="cardRow"></div>
       <button class="scroll-btn right" onclick="scrollRight()">&#8250;</button>
     </div>
   </section>

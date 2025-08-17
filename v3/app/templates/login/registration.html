@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required minlength="6">
-                    <small style="color: #FAF6EE; font-size: 12px;">Password must be at least 6 characters long</small>
+                    <small>Password must be at least 6 characters long</small>
                 </div>
 
                 <div class="form-group">
@@ -58,22 +58,5 @@
     {% include 'includes/footer.html' %}
 
     <script src="{{ url_for('static', filename='js/registration.js') }}"></script>
-
-    <style>
-        .success-message {
-            background-color: rgba(40, 167, 69, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            margin-top: 10px;
-            border: 1px solid #28a745;
-        }
-
-        .form-group small {
-            margin-top: 5px;
-            display: block;
-        }
-    </style>
 </body>
 </html>

@@ -28,7 +28,7 @@ async function handleRegister(event) {
     }
 
     try {
-        const response = await fetch('/api/v1/users/', {
+        const response = await fetch('/api/v3/users/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ async function handleRegister(event) {
 // Check if already logged in
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const response = await fetch('/api/v1/auth/protected', {
+        const response = await fetch('/api/v3/auth/protected', {
             credentials: 'include'
         });
 

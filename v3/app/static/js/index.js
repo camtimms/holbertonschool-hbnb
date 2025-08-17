@@ -1,12 +1,14 @@
 // card scroll functions
 function scrollBack() {
   const row = document.getElementById("cardRow");
-  row.scrollBy({ left: -360, behavior: "smooth" });
+  const cardWidth = 360; // Approximate card width including gap
+  row.scrollBy({ left: -cardWidth, behavior: "smooth" });
 }
 
 function scrollRight() {
   const row = document.getElementById("cardRow");
-  row.scrollBy({ left: 360, behavior: "smooth" });
+  const cardWidth = 360; // Approximate card width including gap
+  row.scrollBy({ left: cardWidth, behavior: "smooth" });
 }
 
 // Dynamic places data loaded from API

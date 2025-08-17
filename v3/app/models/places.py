@@ -20,9 +20,9 @@ class Place(BaseModel):
     _owner_id = db.Column("owner_id", db.String(36), ForeignKey('users.id'), nullable=False)
 
     # Implement relationships
-    owner = relationship('User', lazy=True)
-    reviews = relationship('Review', back_populates='place', lazy=True)
-    amenities = relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy=True)
+    owner = relationship('User', lazy='subquery')
+    reviews = relationship('Review', back_populates='place', lazy='subquery')
+    amenities = relationship('Amenity', secondary=place_amenity_asc, back_populates='places', lazy='subquery')
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
@@ -37,7 +37,6 @@ class Place(BaseModel):
         self.owner = owner  # SQLAlchemy relationship
         self.owner_id = owner.id  # Foreign key
         self.reviews = []  # List to store related reviews
-        self.amenities = []  # List to store related amenities
 
     # --- Getters and Setters ---
     @property

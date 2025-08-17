@@ -6,7 +6,7 @@ let amenitiesData = {}; // Cache for amenity ID to name mapping
 
 // Dynamic image mapping based on place data
 function getPlaceImage(place) {
-    // Map by title first, then real hashed IDs as fallback
+    // Map by title only - works regardless of database IDs
     const titleImageMap = {
         'Dragon\'s Rest Tavern': 'place1.jpeg',
         'Cozy Woodland Cabin': 'place2.jpeg', 
@@ -14,19 +14,13 @@ function getPlaceImage(place) {
         'Royal Castle Quarters': 'place4.jpeg'
     };
     
-    const idImageMap = {
-        'e1c7659f-c460-4566-a090-7b31e04304ba': 'place1.jpeg', // Dragon's Rest Tavern
-        '47c92f88-7c3d-4260-8800-9c37bf185a54': 'place2.jpeg', // Cozy Woodland Cabin
-        'a68c6b9c-a61b-42f4-915c-ecf5e5f6f0de': 'place3.jpeg', // Ethereal Fae Retreat
-        'c4069172-fd51-4d12-9703-deece20802ba': 'place4.jpeg'  // Royal Castle Quarters
-    };
-    
-    // Try title mapping first, then real ID, then default
-    return titleImageMap[place.title] || idImageMap[place.id] || 'default_place.jpg';
+    // Use title mapping or default image
+    return titleImageMap[place.title] || 'default_place.jpg';
 }
 
 // Dynamic host name mapping based on place data
 function getHostName(place) {
+    // Map by title only - works regardless of database IDs
     const titleHostMap = {
         'Dragon\'s Rest Tavern': 'Guild Master Thorin',
         'Cozy Woodland Cabin': 'Forest Keeper Elaria',
@@ -34,15 +28,8 @@ function getHostName(place) {
         'Royal Castle Quarters': 'Castle Steward Magnus'
     };
     
-    const idHostMap = {
-        'e1c7659f-c460-4566-a090-7b31e04304ba': 'Guild Master Thorin',    // Dragon's Rest Tavern
-        '47c92f88-7c3d-4260-8800-9c37bf185a54': 'Forest Keeper Elaria',  // Cozy Woodland Cabin
-        'a68c6b9c-a61b-42f4-915c-ecf5e5f6f0de': 'Fae Queen Titania',     // Ethereal Fae Retreat
-        'c4069172-fd51-4d12-9703-deece20802ba': 'Castle Steward Magnus'  // Royal Castle Quarters
-    };
-    
-    // Try title mapping first, then real ID, then load from API
-    return titleHostMap[place.title] || idHostMap[place.id] || null;
+    // Use title mapping or fallback to API loading
+    return titleHostMap[place.title] || null;
 }
 
 // Load amenities data for ID to name mapping
@@ -145,38 +132,41 @@ async function loadPlaceDetails() {
 
 // Display place details
 function displayPlaceDetails(place) {
-    document.getElementById('placeTitle').textContent = place.title || 'Unknown Place';
-    document.getElementById('placeDescription').textContent = place.description || 'No description available';
-    document.getElementById('placePrice').textContent = `${place.price || 0} gold`;
-    document.getElementById('placeLocation').textContent = `${place.latitude || 0}, ${place.longitude || 0}`;
-    
-    // Get host name using dynamic mapping or load from API
-    const hostName = getHostName(place);
-    if (hostName) {
-        document.getElementById('hostName').textContent = hostName;
-    } else if (place.owner_id) {
-        loadHostInfo(place.owner_id);
-    } else {
-        document.getElementById('hostName').textContent = 'Unknown Host';
-    }
+    document.getElementById('placeTitle').textContent = place.title;
+    document.getElementById('placeDescription').textContent = place.description;
+    document.getElementById('placePrice').textContent = `${place.price} gold`;
+    document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
+    document.getElementById('placeImage').src = `/static/images/${currentPlace.image}`;
+    document.getElementById('placeImage').alt = currentPlace.title;
 
-    // Set image using dynamic mapping
-    const imageName = getPlaceImage(place);
-    document.getElementById('placeImage').src = `/static/images/${imageName}`;
-    document.getElementById('placeImage').alt = place.title || 'Place Image';
+    // Set host name based on place ID
+    const hostMapping = {
+        '1': 'Guild Master Thorin',      // Dragon's Rest Tavern
+        '2': 'Forest Keeper Elaria',    // Cozy Woodland Cabin
+        '3': 'Fae Queen Titania',       // Ethereal Fae Retreat
+        '4': 'Castle Steward Magnus'    // Royal Castle Quarters
+    };
+    
+    const hostName = hostMapping[place.id] || 'Guild Master';
+    document.getElementById('hostName').textContent = hostName;
+
+    const imgEl = document.getElementById('placeImage');
+    const defaultImg = '/static/images/default-placeholder.jpeg'; // ensure this exists
+    if (place.image && typeof place.image === 'string' && place.image.length > 0) {
+        imgEl.src = place.image; // <-- use backend-provided URL directly
+    } else {
+        imgEl.src = defaultImg;
+    }
+    imgEl.alt = place.title || 'Place image';
 
     // Display amenities if they exist
     if (place.amenities && place.amenities.length > 0) {
-        console.log('Place amenities:', place.amenities);
-        console.log('Available amenities data:', amenitiesData);
-        
         const amenitiesSection = document.getElementById('amenitiesSection');
         const amenitiesList = document.getElementById('amenitiesList');
 
         amenitiesList.innerHTML = place.amenities.map(amenityId => {
             // Get amenity name from cached data, fallback to ID if not found
             const amenityName = amenitiesData[amenityId] || amenityId;
-            console.log(`Amenity ID: ${amenityId} -> Name: ${amenityName}`);
             return `<span class="amenity-tag">${amenityName}</span>`;
         }).join('');
 
@@ -361,7 +351,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Load amenities data first, then place details that depend on it
         await loadAmenitiesData();
-        console.log('Amenities data loaded:', amenitiesData);
         
         // Load other components in parallel
         await Promise.all([
@@ -373,4 +362,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to initialize page:', err);
     }
 });
+
 

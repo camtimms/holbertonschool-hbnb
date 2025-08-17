@@ -37,6 +37,10 @@ body {
     flex-direction: column;
 }
 
+.place-main {
+    flex: 1;
+}
+
 h1 {
     font-family: 'Celtic Garamond the 2nd', serif;
 }
@@ -55,83 +59,6 @@ h3 {
 
 p {
     font-family: 'Poltawski Nowy', serif;
-}
-
-/* Navbar styles - consistent with other pages */
-.navbar {
-    background-color: #201D16;
-    color: #FAF6EE;
-    height: 90px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 20px;
-    gap: 20px;
-}
-
-.nav-left .logo {
-    height: 90px;
-    width: auto;
-    object-fit: contain;
-}
-
-.nav-center {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-link {
-    color: #FAF6EE;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    font-size: 16px;
-}
-
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.login-button, .logout-btn {
-    padding: 12px 24px;
-    background-color: #ffffff22;
-    color: #FAF6EE;
-    text-decoration: none;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-size: 16px;
-}
-
-.login-button:hover, .logout-btn:hover {
-    background-color: #ffffff44;
-}
-
-#userInfo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-#welcomeMsg {
-    color: #FEC882;
-    font-weight: bold;
 }
 
 /* Main content */
@@ -521,19 +448,6 @@ p {
     background-color: rgba(245, 245, 220, 0.2);
     border: 1px solid #8B4513;
     border-radius: 10px;
-}
-
-/* Footer */
-.footer {
-    background-color: #201D16;
-    color: #FAF6EE;
-    height: 50px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.2);
-    margin-top: auto;
 }
 
 /* Responsive design */

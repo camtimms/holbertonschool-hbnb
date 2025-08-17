@@ -7,7 +7,7 @@ to ensure consistency between frontend mock data and actual database data.
 
 Usage:
     python load_sample_data.py [--reset] [--verbose]
-    
+
 Arguments:
     --reset: Clear existing data before loading
     --verbose: Show detailed output
@@ -26,28 +26,28 @@ from app.services.facade import HBnBFacade
 def clear_database():
     """Clear all existing data from the database"""
     print("🗑️  Clearing existing data...")
-    
+
     # Clear tables in correct order to handle foreign key constraints
     db.session.execute(db.text('SET FOREIGN_KEY_CHECKS = 0;'))
-    
+
     # Clear association table first
     db.session.execute(db.text('DELETE FROM place_amenity_asc;'))
-    
+
     # Clear main tables
     db.session.execute(db.text('DELETE FROM reviews;'))
     db.session.execute(db.text('DELETE FROM places;'))
     db.session.execute(db.text('DELETE FROM amenities;'))
     db.session.execute(db.text('DELETE FROM users;'))
-    
+
     db.session.execute(db.text('SET FOREIGN_KEY_CHECKS = 1;'))
     db.session.commit()
-    
+
     print("✅ Database cleared successfully")
 
 def load_users(facade, verbose=False):
     """Load sample users including place owners"""
     print("👥 Loading users...")
-    
+
     users_data = [
         {
             'first_name': 'Guild Master',
@@ -85,7 +85,7 @@ def load_users(facade, verbose=False):
             'is_admin': False
         }
     ]
-    
+
     created_users = {}
     for user_data in users_data:
         try:
@@ -97,14 +97,14 @@ def load_users(facade, verbose=False):
         except Exception as e:
             db.session.rollback()
             print(f"  ❌ Failed to create user {user_data['first_name']}: {e}")
-    
+
     print(f"✅ Created {len(created_users)} users")
     return created_users
 
 def load_amenities(facade, verbose=False):
     """Load sample amenities matching the JS data"""
     print("🏠 Loading amenities...")
-    
+
     amenities_data = [
         {'name': 'Hot Meals'},
         {'name': 'Finest Ale'},
@@ -124,7 +124,7 @@ def load_amenities(facade, verbose=False):
         {'name': 'Medieval Luxury'},
         {'name': 'Tapestries'}
     ]
-    
+
     created_amenities = {}
     for amenity_data in amenities_data:
         try:
@@ -136,18 +136,18 @@ def load_amenities(facade, verbose=False):
         except Exception as e:
             db.session.rollback()
             print(f"  ❌ Failed to create amenity {amenity_data['name']}: {e}")
-    
+
     print(f"✅ Created {len(created_amenities)} amenities")
     return created_amenities
 
 def load_places(facade, users, amenities, verbose=False):
     """Load sample places matching index.js and place_details.js"""
     print("🏰 Loading places...")
-    
+
     places_data = [
         {
             'title': 'Dragon\'s Rest Tavern',
-            'description': 'A legendary tavern where heroes gather to share tales of their adventures. Features comfortable rooms, hearty meals, and the finest ale in the kingdom. The tavern is renowned for its magical warmth that keeps adventurers cozy even in the coldest nights. Cool spot #1',
+            'description': 'A legendary tavern where heroes gather to share tales of their adventures. Features comfortable rooms, hearty meals, and the finest ale in the kingdom. The tavern is renowned for its magical warmth that keeps adventurers cozy even in the coldest nights.',
             'price': 75.0,
             'latitude': 42.3601,
             'longitude': -71.0589,
@@ -156,7 +156,7 @@ def load_places(facade, users, amenities, verbose=False):
         },
         {
             'title': 'Cozy Woodland Cabin',
-            'description': 'A charming cabin nestled deep in the enchanted forest. Perfect for those seeking peace and tranquility away from the bustling kingdom. Features rustic furniture, a stone fireplace, and windows overlooking the mystical woods. Awesome place #2',
+            'description': 'A charming cabin nestled deep in the enchanted forest. Perfect for those seeking peace and tranquility away from the bustling kingdom. Features rustic furniture, a stone fireplace, and windows overlooking the mystical woods.',
             'price': 100.0,
             'latitude': 45.5152,
             'longitude': -122.6784,
@@ -165,7 +165,7 @@ def load_places(facade, users, amenities, verbose=False):
         },
         {
             'title': 'Ethereal Fae Retreat',
-            'description': 'A magical sanctuary where the veil between worlds is thin. This otherworldly retreat offers guests a chance to experience the mystical realm of the fae. Surrounded by glowing flowers and singing crystals. Nice view #3',
+            'description': 'A magical sanctuary where the veil between worlds is thin. This otherworldly retreat offers guests a chance to experience the mystical realm of the fae. Surrounded by glowing flowers and singing crystals.',
             'price': 200.0,
             'latitude': 51.5074,
             'longitude': -0.1278,
@@ -174,7 +174,7 @@ def load_places(facade, users, amenities, verbose=False):
         },
         {
             'title': 'Royal Castle Quarters',
-            'description': 'Luxurious accommodations within the walls of an ancient castle. Experience royal treatment with tapestries, four-poster beds, and views of the kingdom. Perfect for those who desire the finest in medieval luxury. Hidden gem #4',
+            'description': 'Luxurious accommodations within the walls of an ancient castle. Experience royal treatment with tapestries, four-poster beds, and views of the kingdom. Perfect for those who desire the finest in medieval luxury.',
             'price': 300.0,
             'latitude': 48.8566,
             'longitude': 2.3522,
@@ -182,7 +182,7 @@ def load_places(facade, users, amenities, verbose=False):
             'amenity_names': ['Royal Treatment', 'Four-Poster Beds', 'Castle Views', 'Medieval Luxury', 'Tapestries']
         }
     ]
-    
+
     created_places = {}
     for place_data in places_data:
         try:
@@ -191,7 +191,7 @@ def load_places(facade, users, amenities, verbose=False):
             if not owner:
                 print(f"  ❌ Owner not found for {place_data['title']}")
                 continue
-            
+
             # Get amenity IDs
             amenity_ids = []
             for amenity_name in place_data['amenity_names']:
@@ -200,7 +200,7 @@ def load_places(facade, users, amenities, verbose=False):
                     amenity_ids.append(amenity.id)
                 elif verbose:
                     print(f"  ⚠️  Amenity '{amenity_name}' not found")
-            
+
             # Create place data for facade
             create_data = {
                 'title': place_data['title'],
@@ -211,7 +211,7 @@ def load_places(facade, users, amenities, verbose=False):
                 'owner_id': owner.id,
                 'amenities': amenity_ids
             }
-            
+
             place = facade.create_place(create_data)
             created_places[place_data['title']] = place
             if verbose:
@@ -219,14 +219,14 @@ def load_places(facade, users, amenities, verbose=False):
         except Exception as e:
             db.session.rollback()
             print(f"  ❌ Failed to create place {place_data['title']}: {e}")
-    
+
     print(f"✅ Created {len(created_places)} places")
     return created_places
 
 def load_reviews(facade, users, places, verbose=False):
     """Load sample reviews matching place_details.js"""
     print("⭐ Loading reviews...")
-    
+
     # Create additional review users
     review_users_data = [
         {'first_name': 'Aragorn', 'last_name': 'Ranger', 'email': 'aragorn@ranger.com', 'password': 'ranger123'},
@@ -238,7 +238,7 @@ def load_reviews(facade, users, places, verbose=False):
         {'first_name': 'Princess', 'last_name': 'Zelda', 'email': 'zelda@hyrule.com', 'password': 'triforce123'},
         {'first_name': 'Sir', 'last_name': 'Galahad', 'email': 'galahad@knight.com', 'password': 'knight123'}
     ]
-    
+
     # Create review users
     review_users = {}
     for user_data in review_users_data:
@@ -250,7 +250,7 @@ def load_reviews(facade, users, places, verbose=False):
         except Exception as e:
             if verbose:
                 print(f"  ⚠️  Review user might already exist: {user_data['first_name']}")
-    
+
     # Define reviews matching place_details.js sample data
     reviews_data = [
         # Dragon's Rest Tavern reviews
@@ -306,7 +306,7 @@ def load_reviews(facade, users, places, verbose=False):
             'rating': 4
         }
     ]
-    
+
     created_reviews = []
     for review_data in reviews_data:
         try:
@@ -315,13 +315,13 @@ def load_reviews(facade, users, places, verbose=False):
             if not place:
                 print(f"  ❌ Place not found: {review_data['place_title']}")
                 continue
-            
+
             # Get user
             user = review_users.get(review_data['user_key'])
             if not user:
                 print(f"  ❌ User not found: {review_data['user_key']}")
                 continue
-            
+
             # Create review data for facade
             create_data = {
                 'place_id': place.id,
@@ -329,14 +329,14 @@ def load_reviews(facade, users, places, verbose=False):
                 'text': review_data['text'],
                 'rating': review_data['rating']
             }
-            
+
             review = facade.create_review(create_data)
             created_reviews.append(review)
             if verbose:
                 print(f"  ✅ Created review: {user.first_name} -> {place.title} ({review.rating}⭐)")
         except Exception as e:
             print(f"  ❌ Failed to create review: {e}")
-    
+
     print(f"✅ Created {len(created_reviews)} reviews")
     return created_reviews
 
@@ -348,41 +348,41 @@ def main():
 
     # Create Flask app
     app = create_app()
-    
+
     with app.app_context():
         print("🚀 HBnB Sample Data Loader")
         print("=" * 40)
-        
+
         # Initialize facade
         facade = HBnBFacade()
-        
+
         try:
             # Clear database if requested
             if args.reset:
                 clear_database()
-            
+
             # Load data in order
             users = load_users(facade, args.verbose)
             amenities = load_amenities(facade, args.verbose)
             places = load_places(facade, users, amenities, args.verbose)
             reviews = load_reviews(facade, users, places, args.verbose)
-            
+
             print("=" * 40)
             print("🎉 Sample data loaded successfully!")
             print(f"📊 Summary:")
             print(f"   - {len(users)} users")
-            print(f"   - {len(amenities)} amenities") 
+            print(f"   - {len(amenities)} amenities")
             print(f"   - {len(places)} places")
             print(f"   - {len(reviews)} reviews")
             print("\n💡 The data matches your frontend JavaScript files:")
             print("   - Places match index.js (Tavern, Cozy cabin, etc.)")
             print("   - Reviews match place_details.js sample data")
             print("   - All relationships properly established")
-            
+
         except Exception as e:
             print(f"❌ Error loading sample data: {e}")
             return 1
-    
+
     return 0
 
 if __name__ == '__main__':

@@ -26,7 +26,6 @@ def create_app(config_class="config.DevelopmentConfig"):
     # Initialize Flask extensions with app
     bcrypt.init_app(app)
     db.init_app(app)
-    Session(app)
 
     # Template routes (define BEFORE API to avoid conflicts)
     @app.route('/')
@@ -46,6 +45,10 @@ def create_app(config_class="config.DevelopmentConfig"):
     def place_details(place_id=None):
         return render_template('place_details/place_details.html', place_id=place_id)
 
+    @app.route('/place/<place_id>/add-review')
+    def add_review(place_id=None):
+        return render_template('place_details/add_review.html', place_id=place_id)
+
     # Create Api instance
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v3/')
 
@@ -63,6 +66,9 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Create database tables within app context
     with app.app_context():
+        # Initialize sessions within app context
+        Session(app)
+        
         # Import all models to ensure they're registered
         from app.models.users import User
         from app.models.places import Place

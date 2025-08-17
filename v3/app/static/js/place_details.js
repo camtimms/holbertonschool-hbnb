@@ -64,14 +64,14 @@ async function checkAuth() {
 
         if (response.ok) {
             currentUser = await response.json();
+            
             document.getElementById('loginBtn').style.display = 'none';
             document.getElementById('userInfo').style.display = 'block';
             document.getElementById('welcomeMsg').textContent = `Welcome, ${currentUser.first_name}!`;
 
-            // Show add review section if user is logged in and hasn't reviewed
-            if (!userHasReviewed && currentPlace && currentPlace.owner_id !== currentUser.id) {
-                document.getElementById('addReviewSection').style.display = 'block';
-            }
+            // Show add review button for logged-in users
+            showAddReviewButton();
+
         }
     } catch (error) {
         console.log('User not logged in');
@@ -88,7 +88,6 @@ async function logout() {
         currentUser = null;
         document.getElementById('loginBtn').style.display = 'block';
         document.getElementById('userInfo').style.display = 'none';
-        document.getElementById('addReviewSection').style.display = 'none';
         window.location.reload();
     } catch (error) {
         console.error('Logout error:', error);
@@ -98,14 +97,12 @@ async function logout() {
 // Load place details
 async function loadPlaceDetails() {
     try {
-        console.log('Fetching place details from:', `/api/v3/places/${placeId}`);
         const response = await fetch(`/api/v3/places/${placeId}`, {
             credentials: 'include'
         });
 
         if (response.ok) {
             currentPlace = await response.json();
-            console.log('Place details loaded:', currentPlace);
             displayPlaceDetails(currentPlace);
         } else {
             console.error('Failed to load place details, status:', response.status);
@@ -185,17 +182,14 @@ async function loadHostInfo(ownerId) {
 // Load reviews for the place
 async function loadReviews() {
     try {
-        console.log('Fetching reviews from:', `/api/v3/reviews/places/${placeId}/reviews`);
         const response = await fetch(`/api/v3/reviews/places/${placeId}/reviews`, {
             credentials: 'include'
         });
 
         if (response.ok) {
             const reviews = await response.json();
-            console.log('Reviews loaded:', reviews);
             displayReviews(reviews);
         } else {
-            console.log('Reviews API response not ok, status:', response.status);
             // Show empty reviews if API fails
             displayReviews([]);
         }
@@ -217,19 +211,9 @@ function displayReviews(reviews) {
     if (currentUser) {
         userHasReviewed = reviews.some(review => review.user_id === currentUser.id);
 
-        // Show/hide add review section based on conditions
-        const canReview = currentUser &&
-                         !userHasReviewed &&
-                         currentPlace &&
-                         currentPlace.owner_id !== currentUser.id;
+        // Show add review button if user is authenticated
+        showAddReviewButton();
 
-        if (canReview) {
-            document.getElementById('addReviewSection').style.display = 'block';
-        } else if (userHasReviewed) {
-            document.getElementById('addReviewSection').innerHTML =
-                '<div class="review-notice">You have already reviewed this place.</div>';
-            document.getElementById('addReviewSection').style.display = 'block';
-        }
     }
 
     if (reviews.length === 0) {
@@ -254,61 +238,6 @@ function displayReviews(reviews) {
     `).join('');
 }
 
-// Submit review
-async function submitReview(event) {
-    event.preventDefault();
-
-    if (!currentUser) {
-        alert('Please log in to submit a review.');
-        return;
-    }
-
-    const rating = parseInt(document.getElementById('reviewRating').value);
-    const text = document.getElementById('reviewText').value;
-
-    try {
-        const response = await fetch('/api/v3/reviews/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                text: text,
-                rating: rating,
-                user_id: currentUser.id,
-                place_id: placeId
-            })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            showReviewMessage('Review submitted successfully!', 'success');
-            document.getElementById('reviewForm').reset();
-            // Reload reviews
-            setTimeout(() => {
-                loadReviews();
-            }, 1000);
-        } else {
-            showReviewMessage(result.error || 'Failed to submit review', 'error');
-        }
-    } catch (error) {
-        showReviewMessage('Network error. Please try again.', 'error');
-    }
-}
-
-// Show review message
-function showReviewMessage(message, type) {
-    const messageDiv = document.getElementById('reviewMessage');
-    messageDiv.textContent = message;
-    messageDiv.className = `review-message ${type}`;
-    messageDiv.style.display = 'block';
-
-    setTimeout(() => {
-        messageDiv.style.display = 'none';
-    }, 5000);
-}
 
 // Show error state
 function showError() {
@@ -321,6 +250,21 @@ function goBack() {
     window.location.href = '/'
 }
 
+// Show add review button if user is authenticated
+function showAddReviewButton() {
+    const addReviewBtn = document.getElementById('addReviewBtn');
+    if (addReviewBtn && currentUser) {
+        addReviewBtn.style.display = 'block';
+    }
+}
+
+// Navigate to add review page
+function goToAddReview() {
+    if (placeId) {
+        window.location.href = `/place/${placeId}/add-review`;
+    }
+}
+
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
     placeId = getPlaceId();
@@ -331,7 +275,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    console.log('Loading place details for ID:', placeId);
     
     try {
         // Load amenities data first, then place details that depend on it
@@ -339,7 +282,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Load other components in parallel
         await Promise.all([
-            checkAuth().catch(err => console.log('Auth check failed:', err)),
+            checkAuth().catch(err => console.error('Auth check failed:', err)),
             loadPlaceDetails().catch(err => console.error('Failed to load place details:', err)),
             loadReviews().catch(err => console.error('Failed to load reviews:', err))
         ]);

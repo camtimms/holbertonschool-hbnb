@@ -121,6 +121,25 @@
   transform: translateY(-1px);
 }
 
+.logout-btn {
+  padding: 12px 36px;
+  background-color: rgba(139, 69, 19, 0.2);
+  color: #FAF6EE;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid #8B4513;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: x-large;
+  font-family: inherit;
+}
+
+.logout-btn:hover {
+  background-color: rgba(139, 69, 19, 0.3);
+  border-color: #654321;
+  transform: translateY(-1px);
+}
+
 .nav-actions {
   display: flex;
   align-items: center;

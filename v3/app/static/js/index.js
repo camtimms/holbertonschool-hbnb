@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Not logged in");
     })
     .then(user => {
-        const loginBtn = document.getElementById("login-btn");
+        const loginBtn = document.getElementById("loginBtn");
         const userInfo = document.getElementById("userInfo");
         const welcomeMsg = document.getElementById("welcomeMsg");
         
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (welcomeMsg) welcomeMsg.textContent = `Welcome, ${user.first_name}!`;
     })
     .catch(() => {
-        const loginBtn = document.getElementById("login-btn");
+        const loginBtn = document.getElementById("loginBtn");
         const userInfo = document.getElementById("userInfo");
         
         if (loginBtn) loginBtn.style.display = "block";

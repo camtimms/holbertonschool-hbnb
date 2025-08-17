@@ -73,35 +73,14 @@
                 <section class="reviews-section">
                     <div class="reviews-header">
                         <h2>Guest Reviews</h2>
-                        <div id="reviewsCount" class="reviews-count">Loading reviews...</div>
+                        <div class="reviews-header-actions">
+                            <div id="reviewsCount" class="reviews-count">Loading reviews...</div>
+                            <button id="addReviewBtn" class="add-review-btn" onclick="goToAddReview()" style="display: none;">
+                                📝 Write a Review
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Add Review Form (only for logged-in users) -->
-                    <div id="addReviewSection" class="add-review" style="display: none;">
-                        <h3>Share your adventure</h3>
-                        <form id="reviewForm" class="form" onsubmit="submitReview(event)">
-                            <div class="form-group">
-                                <label for="reviewRating">Rating (1-5 stars):</label>
-                                <select id="reviewRating" name="rating" required>
-                                    <option value="">Select rating</option>
-                                    <option value="1">1 Star - Poor</option>
-                                    <option value="2">2 Stars - Fair</option>
-                                    <option value="3">3 Stars - Good</option>
-                                    <option value="4">4 Stars - Very Good</option>
-                                    <option value="5">5 Stars - Excellent</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="reviewText">Your Review:</label>
-                                <textarea id="reviewText" name="text" placeholder="Tell other adventurers about your stay..." required></textarea>
-                            </div>
-
-                            <button type="submit" class="submit-review-btn">Submit Review</button>
-                        </form>
-
-                        <div id="reviewMessage" class="review-message" style="display: none;"></div>
-                    </div>
 
                     <!-- Reviews List -->
                     <div id="reviewsList" class="reviews-list">

@@ -74,6 +74,15 @@ class User(BaseModel):
             raise ValueError("Email not valid")
 
     @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        """Setter for password - stores the hashed value"""
+        self._password = value
+
+    @property
     def is_admin(self):
         return self._is_admin
 

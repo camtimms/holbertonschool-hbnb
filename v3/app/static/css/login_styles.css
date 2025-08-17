@@ -137,8 +137,8 @@ p {
     color: rgba(250, 246, 238, 0.6);
 }
 
-/* Login/Register button styling */
-.login-btn {
+/* Login/Register form button styling */
+.login-form .login-btn {
     padding: 15px 30px;
     background: linear-gradient(135deg, #8B4513, #D2691E);
     color: #FAF6EE;
@@ -153,13 +153,13 @@ p {
     font-family: inherit;
 }
 
-.login-btn:hover {
+.login-form .login-btn:hover {
     background: linear-gradient(135deg, #A0522D, #CD853F);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
-.login-btn:active {
+.login-form .login-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(139, 69, 19, 0.3);
 }
@@ -204,7 +204,7 @@ p {
 }
 
 /* Loading state for buttons */
-.login-btn:disabled {
+.login-form .login-btn:disabled {
     background: linear-gradient(135deg, #6c5ce7, #a29bfe);
     cursor: not-allowed;
     transform: none;
@@ -286,7 +286,7 @@ p {
         padding: 14px 15px;
     }
     
-    .login-btn {
+    .login-form .login-btn {
         font-size: 1rem;
         padding: 14px 25px;
     }

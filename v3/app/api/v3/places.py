@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields
-from flask import request, session
+from flask import request, session, url_for
 from app.services import facade
 from functools import wraps
+import urllib.parse
 
 api = Namespace('places', description='Place operations')
 
@@ -31,6 +32,10 @@ place_model = api.model('Place', {
 
 def serialize_place(place):
     """Helper function to serialize place object consistently"""
+
+    filename = urllib.parse.quote(place.title) + ".jpg"
+    image_url = url_for('static', filename=f'images/{filename}', _external=True)
+
     amenities_list = []
     if hasattr(place, 'amenities') and place.amenities:
         for amenity in place.amenities:
@@ -46,8 +51,9 @@ def serialize_place(place):
         'price': float(place.price),
         'latitude': place.latitude,
         'longitude': place.longitude,
-        'owner_id': place.owner.id,
-        'amenities': amenities_list
+        'owner_id': place.owner.id if place.owner else None,
+        'amenities': amenities_list,
+        'image': image_url
     }
 
 def login_required(f): # login wrap

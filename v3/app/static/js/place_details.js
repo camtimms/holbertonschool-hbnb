@@ -151,6 +151,9 @@ function displayPlaceDetails(place) {
     document.getElementById('placeDescription').textContent = place.description;
     document.getElementById('placePrice').textContent = `${place.price} gold`;
     document.getElementById('placeLocation').textContent = `${place.latitude}, ${place.longitude}`;
+    document.getElementById('placeImage').src = `/static/images/${currentPlace.image}`;
+    document.getElementById('placeImage').alt = currentPlace.title;
+
     // Set host name based on place ID
     const hostMapping = {
         '1': 'Guild Master Thorin',      // Dragon's Rest Tavern
@@ -162,17 +165,14 @@ function displayPlaceDetails(place) {
     const hostName = hostMapping[place.id] || 'Guild Master';
     document.getElementById('hostName').textContent = hostName;
 
-    // Set image based on place ID to match scripts.js
-    const imageMapping = {
-        '1': 'place1.jpeg', // Dragon's Rest Tavern
-        '2': 'place2.jpeg', // Cozy Woodland Cabin  
-        '3': 'place3.jpeg', // Ethereal Fae Retreat
-        '4': 'place4.jpeg'  // Royal Castle Quarters
-    };
-    
-    const imageName = imageMapping[place.id] || 'place1.jpeg';
-    document.getElementById('placeImage').src = `/static/images/${imageName}`;
-    document.getElementById('placeImage').alt = place.title;
+    const imgEl = document.getElementById('placeImage');
+    const defaultImg = '/static/images/default-placeholder.jpeg'; // ensure this exists
+    if (place.image && typeof place.image === 'string' && place.image.length > 0) {
+        imgEl.src = place.image; // <-- use backend-provided URL directly
+    } else {
+        imgEl.src = defaultImg;
+    }
+    imgEl.alt = place.title || 'Place image';
 
     // Display amenities if they exist
     if (place.amenities && place.amenities.length > 0) {
@@ -421,4 +421,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPlaceDetails().catch(err => console.error('Failed to load place details:', err));
     loadReviews().catch(err => console.error('Failed to load reviews:', err));
 });
+
 

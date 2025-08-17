@@ -20,8 +20,8 @@
 }
 
 .navbar {
-  background-color: rgba(0, 0, 0, 0.85);
-  color: white;
+  background-color: #201D16;
+  color: #FAF6EE;
   height: 90px;
   width: 100%;
   position: fixed;
@@ -32,7 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(32,29,22,0.2);
+  border-bottom: 2px solid #8B4513;
 }
 
 .navbar-container {
@@ -41,8 +42,8 @@
   align-items: center;
   max-width: 1200px;
   width: 100%;
-  padding: 0 20px;
-  gap: 20px;
+  padding: 0 30px;
+  gap: 30px;
 }
 
 .nav-left img {
@@ -65,7 +66,8 @@
 .logo {
   font-size: 1.4rem;
   font-weight: bold;
-  color: white;
+  color: #D4AF37;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 }
 
 .search-form {
@@ -87,33 +89,36 @@
 
 .search-btn {
   padding: 8px 16px;
-  background-color: #ffffff22;
-  color: white;
-  border: none;
+  background-color: rgba(139, 69, 19, 0.2);
+  color: #FAF6EE;
+  border: 1px solid #8B4513;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
 }
 
 .search-btn:hover {
-  background-color: #ffffff44;
+  background-color: rgba(139, 69, 19, 0.3);
+  border-color: #654321;
 }
 
 
 .login-btn {
   padding: 12px 36px;
-  background-color: #ffffff22;
-  color: white;
+  background-color: rgba(139, 69, 19, 0.2);
+  color: #FAF6EE;
   text-decoration: none;
   border-radius: 4px;
-  border: none;
+  border: 1px solid #8B4513;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
   font-size: x-large;
 }
 
 .login-btn:hover {
-  background-color: #ffffff44;
+  background-color: rgba(139, 69, 19, 0.3);
+  border-color: #654321;
+  transform: translateY(-1px);
 }
 
 .nav-actions {
@@ -127,22 +132,23 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-color: rgba(29, 7, 7, 0.658);
-  border: 1px solid #ccc;
+  background-color: rgba(139, 69, 19, 0.2);
+  border: 1px solid #8B4513;
   border-radius: 8px;
   padding: 6px 30px 6px 10px;
   font-size: 14px;
   font-family: inherit;
-  color: white;
+  color: #FAF6EE;
   cursor: pointer;
 
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(32,29,22,0.1);
   transition: border-color 0.2s ease;
 }
 
 .custom-select select:hover,
 .custom-select select:focus {
-  border-color: #007bff;
+  border-color: #654321;
+  background-color: rgba(139, 69, 19, 0.3);
 }
 
 .custom-select {
@@ -152,10 +158,35 @@
 .custom-select::after {
   content: "▼";
   font-size: 12px;
-  color: #666;
+  color: #D4AF37;
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 15px;
+    gap: 15px;
+  }
+  
+  .search-form {
+    max-width: 200px;
+  }
+  
+  .search-input {
+    width: 150px;
+  }
+  
+  .login-btn {
+    font-size: large;
+    padding: 10px 20px;
+  }
+  
+  .nav-center {
+    display: none;
+  }
 }

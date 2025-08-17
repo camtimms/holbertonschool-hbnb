@@ -23,11 +23,9 @@
   background-color: #201D16;
   color: #FAF6EE;
   width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  padding: 15px 20px;
+  position: static;
+  margin-top: auto;
+  padding: 30px 20px;
   box-shadow: 0 2px 4px rgba(32,29,22,0.2);
   border-top: 2px solid #8B4513;
 }
@@ -39,26 +37,27 @@
   max-width: 1200px;
   margin: 0 auto;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
 }
 
 .footer-section {
   flex: 1;
-  min-width: 200px;
+  min-width: 250px;
+  padding: 0 10px;
 }
 
 .footer-section h4 {
   font-family: 'Celtic Garamond the 2nd', serif;
-  font-size: 1rem;
-  margin-bottom: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
   color: #D4AF37;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 }
 
 .footer-section p {
-  font-size: 0.85rem;
-  line-height: 1.4;
-  margin-bottom: 5px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
   opacity: 0.9;
 }
 
@@ -69,13 +68,13 @@
 }
 
 .footer-links li {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .footer-links a {
   color: #FAF6EE;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   transition: color 0.3s ease;
 }
 

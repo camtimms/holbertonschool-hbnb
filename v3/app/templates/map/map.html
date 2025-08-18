@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBnB DND - Adventure Map</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/map_styles.css') }}" />
+</head>
+<body>
+
+  {% include 'includes/header.html' %}
+
+  <main>
+    <section class="map-container">
+      <div class="map-scroll-wrapper">
+        <div class="scroll-content">
+          <div class="scroll-header">
+            <h1 class="map-title">Adventure Map</h1>
+            <p class="map-subtitle">Click on any location to visit</p>
+          </div>
+          <div class="map-wrapper">
+            <img src="{{ url_for('static', filename='images/colourful map.jpeg') }}" 
+                 alt="Adventure Map" 
+                 class="adventure-map" 
+                 usemap="#adventure-map">
+            
+            <!-- Image map with clickable areas - coordinates to be provided by user -->
+            <map name="adventure-map">
+              <!-- Dragon's Rest Tavern - coordinates placeholder -->
+              <area shape="circle" 
+                    coords="300,200,30" 
+                    href="/place/dragons-rest-tavern" 
+                    alt="Dragon's Rest Tavern"
+                    title="Dragon's Rest Tavern - Legendary tavern where heroes gather">
+              
+              <!-- Cozy Woodland Cabin - coordinates placeholder -->
+              <area shape="circle" 
+                    coords="150,300,30" 
+                    href="/place/cozy-woodland-cabin" 
+                    alt="Cozy Woodland Cabin"
+                    title="Cozy Woodland Cabin - Charming cabin in the enchanted forest">
+              
+              <!-- Ethereal Fae Retreat - coordinates placeholder -->
+              <area shape="circle" 
+                    coords="450,150,30" 
+                    href="/place/ethereal-fae-retreat" 
+                    alt="Ethereal Fae Retreat"
+                    title="Ethereal Fae Retreat - Magical sanctuary of the fae">
+              
+              <!-- Royal Castle Quarters - coordinates placeholder -->
+              <area shape="circle" 
+                    coords="350,350,30" 
+                    href="/place/royal-castle-quarters" 
+                    alt="Royal Castle Quarters"
+                    title="Royal Castle Quarters - Luxurious accommodations in an ancient castle">
+            </map>
+
+            <!-- Location markers for visual indication -->
+            <div class="location-marker tavern" style="left: 285px; top: 185px;" data-location="Dragon's Rest Tavern">
+              <div class="marker-icon">🏰</div>
+              <div class="marker-tooltip">Dragon's Rest Tavern</div>
+            </div>
+            
+            <div class="location-marker cabin" style="left: 135px; top: 285px;" data-location="Cozy Woodland Cabin">
+              <div class="marker-icon">🏡</div>
+              <div class="marker-tooltip">Cozy Woodland Cabin</div>
+            </div>
+            
+            <div class="location-marker retreat" style="left: 435px; top: 135px;" data-location="Ethereal Fae Retreat">
+              <div class="marker-icon">✨</div>
+              <div class="marker-tooltip">Ethereal Fae Retreat</div>
+            </div>
+            
+            <div class="location-marker castle" style="left: 335px; top: 335px;" data-location="Royal Castle Quarters">
+              <div class="marker-icon">👑</div>
+              <div class="marker-tooltip">Royal Castle Quarters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+</body>
+</html>

@@ -162,12 +162,12 @@ EXIT;
 
 ### 6. Load Sample Data (Optional)
 ```bash
-python load_sample_data.py
+python3 load_sample_data.py
 ```
 
 ### 7. Run the Application
 ```bash
-python run.py
+python3 run.py
 ```
 
 The application will start on `http://localhost:5000` with debug mode enabled.

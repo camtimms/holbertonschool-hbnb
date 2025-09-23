@@ -115,6 +115,9 @@ v3/
 - Python 3.x
 - MySQL Server (or SQLite for development)
 - Modern web browser
+- Port forwarding setup if using Docker/containers:
+  - Port 5000: Flask application
+  - Port 3306: MySQL database (for external database tools like DBeaver)
 
 ### Python Dependencies
 - Flask (Web framework)
@@ -171,6 +174,10 @@ python3 run.py
 ```
 
 The application will start on `http://localhost:5000` with debug mode enabled.
+
+### 8. Access the Application
+- **Web Interface**: `http://localhost:5000` (requires port 5000 forwarding if using Docker)
+- **Database Access**: Port 3306 for external tools like DBeaver (requires port 3306 forwarding if using Docker)
 
 ## 🌐 Available Pages
 

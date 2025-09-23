@@ -132,18 +132,24 @@ v3/
 cd /path/to/holbertonschool-hbnb/v3
 ```
 
-### 2. Set Up Virtual Environment (Recommended)
+### 2. Set Up Virtual Environment (Optional)
+*Note: Virtual environment is optional if using Docker or if you prefer to install packages globally*
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+### 3. Start MySQL Service
+```bash
+sudo service mysql start
+```
+
+### 4. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Database Setup (Optional)
+### 5. Database Setup (Optional)
 For production with MySQL:
 ```bash
 # Create database
@@ -154,12 +160,12 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-### 5. Load Sample Data (Optional)
+### 6. Load Sample Data (Optional)
 ```bash
 python load_sample_data.py
 ```
 
-### 6. Run the Application
+### 7. Run the Application
 ```bash
 python run.py
 ```
